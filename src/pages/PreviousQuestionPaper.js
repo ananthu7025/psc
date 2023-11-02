@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import useGoogleDrive from '../components/GDrive';
+import images from '../images';
 
 const PreviousQuestionPaper = () => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+        setTimeout(() => setLoading(false), 5000); // Simulate 3 seconds delay
+  }, []);
   const folderStructure = {
     '2024': {
       'prelims': {
@@ -16,12 +22,12 @@ const PreviousQuestionPaper = () => {
       },
     },
     '2023': {
-      'prelims': {
+      'main': {
         '10th': '1W8DOBt4pJMq4I3u2np7xrOYyKdPzwYYe',
         '12th': '1W8DOBt4pJMq4I3u2np7xrOYyKdPzwYYe',
         'degree': '1W8DOBt4pJMq4I3u2np7xrOYyKdPzwYYe',
       },
-      'main': {
+      'prelims': {
         '10th': '16tM3R0FxLBEaC-pvvs7eLwcSJfLC9fK5',
         '12th': '1ZsWn69EjR85lElekMnYXd-HzT0RHA8kz',
         'degree': '1TSg8BX_0OqHwG5MlaCXsn2rgzrMRRaMn',
@@ -139,36 +145,55 @@ const PreviousQuestionPaper = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {driveItems.map((item, index) => (
-                        <tr key={item.id}>
-                          <td>
-                            <div className="d-flex px-2 py-1">
-                              <p className="text-xs font-weight-bold mb-0">{selectedYear}</p>
-                            </div>
-                          </td>
-                          <td className="align-middle">
-                            <a
-                              href="javascript:;"
-                              className="text-secondary font-weight-bold text-xs"
-                              data-toggle="tooltip"
-                              data-original-title="Edit user"
-                            >
-                              {item.name}
-                            </a>
-                          </td>
-                          <td className="align-middle">
-                            <a
-                              href="javascript:;"
-                              className="text-secondary font-weight-bold text-xs"
-                              data-toggle="tooltip"
-                              data-original-title="Edit user"
-                              onClick={() => openPDF(item.webContentLink)}
-                            >
-                              Download
-                            </a>
-                          </td>
-                        </tr>
-                      ))}
+                    {loading ? (
+  <div style={{ display: "flex", justifyContent: "center", marginLeft: "280px", marginBottom: "100px",textAlign:"center" }}>
+    <span className="loader"></span>
+  </div>
+) : (
+  driveItems.length > 0 ? (
+    <React.Fragment>
+      {driveItems.map((item, index) => (
+        <tr key={item.id}>
+          <td>
+            <div className="d-flex px-2 py-1">
+              <p className="text-xs font-weight-bold mb-0">{selectedYear}</p>
+            </div>
+          </td>
+          <td className="align-middle">
+            <a
+              href="javascript:;"
+              className="text-secondary font-weight-bold text-xs"
+              data-toggle="tooltip"
+              data-original-title="Edit user"
+            >
+              {item.name}
+            </a>
+          </td>
+          <td className="align-middle">
+            <a
+              href="javascript:;"
+              className="text-secondary font-weight-bold text-xs"
+              data-toggle="tooltip"
+              data-original-title="Edit user"
+              onClick={() => openPDF(item.webContentLink)}
+            >
+              Download
+            </a>
+          </td>
+        </tr>
+      ))}
+    </React.Fragment>
+  ) : (
+    <tr>
+      <td colSpan="3" className="text-center">
+        <img style={{ width: "200px", height: "230px" }} src={images.empty} alt="Empty" />
+        <p>No data found</p>
+      </td>
+    </tr>
+  )
+)}
+
+                     
                     </tbody>
                   </table>
                 </div>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import useGoogleDrive from '../components/GDrive';
 import { useGetFolderQuery } from '../api/modules/quiz.Module';
+import images from '../images';
 
 const PscBullettin = () => {
   const [selectedYear, setSelectedYear] = useState('');
@@ -26,7 +27,11 @@ const PscBullettin = () => {
 console.log(folderData.find(item => item.year === selectedYear))
   const openPDF = (webContentLink) => {
     window.open(webContentLink, '_blank');
-  };
+  };  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+        setTimeout(() => setLoading(false), 5000); 
+  }, []);
 
   return (
     <div style={{minHeight:"90vh"}} className="container-fluid py-4">
@@ -70,26 +75,44 @@ console.log(folderData.find(item => item.year === selectedYear))
                       </tr>
                     </thead>
                     <tbody>
-                      {filteredDriveItems.map((item, index) => (
-                        <tr key={item.id}>
-                          <td>
-                            <div className="d-flex px-2 py-1">
-                              <p className="text-xs font-weight-bold mb-0">{selectedYear}</p>
-                            </div>
-                          </td>
-                          <td className="align-middle">
-                            <a href="javascript:;" className="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
-                              {item.name}
-                            </a>
-                          </td>
-                          <td className="align-middle">
-                            <a href="javascript:;" className="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user" onClick={() => openPDF(item.webContentLink)}>
-                              Download
-                            </a>
-                          </td>
-                        </tr>
-                      ))}
+                    {loading ? (
+  <div style={{ display: "flex", justifyContent: "center", marginLeft: "280px", marginBottom: "100px",textAlign:"center" }}>
+    <span className="loader"></span>
+  </div>
+) : (
+  filteredDriveItems.length > 0 ? (
+    filteredDriveItems.map((item, index) => (
+      <tr key={item.id}>
+      <td>
+        <div className="d-flex px-2 py-1">
+          <p className="text-xs font-weight-bold mb-0">{selectedYear}</p>
+        </div>
+      </td>
+      <td className="align-middle">
+        <a href="javascript:;" className="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+          {item.name}
+        </a>
+      </td>
+      <td className="align-middle">
+        <a href="javascript:;" className="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user" onClick={() => openPDF(item.webContentLink)}>
+          Download
+        </a>
+      </td>
+    </tr>
+    ))
+  ) : (
+    <tr>
+      <td colSpan="3" className="text-center">
+        <img style={{ width: "200px", height: "230px" }} src={images.empty} alt="Empty" />
+        <p>No data found</p>
+      </td>
+    </tr>
+  )
+)}
+
+                     
                     </tbody>
+                 
                   </table>
                 </div>
               </div>

@@ -96,7 +96,7 @@ const Profile = () => {
                 <hr className="horizontal gray-light my-4" />
                 <ul style={{textAlign:"left"}} className="list-group">
                   <li className="list-group-item border-0 ps-0 pt-0 text-sm">
-                    <strong className="text-dark">Full Name:</strong> &nbsp; Alec
+                    <strong className="text-dark">Full Name:</strong> &nbsp; 
                     {data?.name}
                   </li>
                   <li className="list-group-item border-0 ps-0 text-sm">

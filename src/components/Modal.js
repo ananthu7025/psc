@@ -12,8 +12,12 @@ const QuizResultModal = ({ result, closeModal, setFetchedQuestions,lenth }) => {
                 <div class="container d-flex justify-content-center">
 
                     <div class=" p-1">
+                        <div className='d-flex' style={{justifyContent:"space-between"}}>
                         <h5 class="mt-3 mb-3">Performance score</h5>
+                <a onClick={handleClose} href="#" class="modal__close">&times;</a>
 
+                        </div>
+                      
                         <div class="border p-2 rounded d-flex flex-row align-items-center">
 
                             <div class="p-1 px-4 d-flex flex-column align-items-center score rounded">
@@ -30,7 +34,6 @@ const QuizResultModal = ({ result, closeModal, setFetchedQuestions,lenth }) => {
                         </div>
                     </div>
                 </div>
-                <a onClick={handleClose} href="#" class="modal__close">&times;</a>
                
             </div>
         </div>
