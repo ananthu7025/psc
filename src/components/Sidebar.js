@@ -1,10 +1,17 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useGetUserDetailsQuery } from '../api/modules/login';
 
 const Sidebar = () => {
   const location = useLocation();
   const currentPath = location.pathname;
-
+  const [isRefech,setIsRefech]=useState(false)
+  const { data,refetch } = useGetUserDetailsQuery(); 
+  useEffect(() => {
+    refetch()
+  }, [isRefech])
+    
+  console.log(data?.isAdmin,"sss");
   return (
     <aside
       className="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3 bg-gradient-dark"
@@ -38,20 +45,11 @@ const Sidebar = () => {
           </li>
           <li class="nav-item">
 
-            <Link to="/PscNotifications" className={`nav-link ${currentPath === '/PscNotifications' ? 'active bg-gradient-success' : ''}`}>
+            <Link to="/EXAMCALENDER&SYLLABUS" className={`nav-link ${currentPath === '/EXAMCALENDER&SYLLABUS' ? 'active bg-gradient-success' : ''}`}>
               <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                 <i className="material-icons opacity-10">notifications</i>
               </div>
-              <span className="nav-link-text ms-1">PSC Notifications</span>
-            </Link>
-          </li>
-          <li class="nav-item">
-
-            <Link to="/Syllabus" className={`nav-link ${currentPath === '/Syllabus' ? 'active bg-gradient-success' : ''}`}>
-              <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                <i className="material-icons opacity-10">library_books</i>
-              </div>
-              <span className="nav-link-text ms-1">Syllabus</span>
+              <span style={{fontSize:"11px"}} className="nav-link-text ms-1">EXAM CALENDER & SYLLABUS</span>
             </Link>
           </li>
           <li class="nav-item">
@@ -89,6 +87,12 @@ const Sidebar = () => {
               </div>
               <span className="nav-link-text ms-1">Special Topic</span>
             </Link>
+            <Link to="/CurrentAffairs" className={`nav-link ${currentPath === '/CurrentAffairs' ? 'active bg-gradient-success' : ''}`}>
+              <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                <i className="material-icons opacity-10">library_books</i>
+              </div>
+              <span className="nav-link-text ms-1">Current Affairs</span>
+            </Link>
           </li>
           <li class="nav-item">
 
@@ -99,6 +103,32 @@ const Sidebar = () => {
               <span className="nav-link-text ms-1">Profile</span>
             </Link>
           </li>
+          {
+            data?.isAdmin ?
+            <li class="nav-item">
+
+            <Link to="/Referal" className={`nav-link ${currentPath === '/Referal' ? 'active bg-gradient-success' : ''}`}>
+              <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                <i className="material-icons opacity-10">person</i>
+              </div>
+              <span className="nav-link-text ms-1">Referal</span>
+            </Link>
+          </li>
+          :null
+          }
+          {
+            data?.isAdmin ?
+            <li class="nav-item">
+
+            <Link to="/User" className={`nav-link ${currentPath === '/User' ? 'active bg-gradient-success' : ''}`}>
+              <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                <i className="material-icons opacity-10">person</i>
+              </div>
+              <span className="nav-link-text ms-1">User List</span>
+            </Link>
+          </li>
+          :null
+          }
         </ul>
       </div>
     </aside>

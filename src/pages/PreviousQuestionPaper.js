@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import useGoogleDrive from '../components/GDrive';
 import images from '../images';
 
 const PreviousQuestionPaper = () => {
@@ -62,7 +61,25 @@ const PreviousQuestionPaper = () => {
   const [selectedYear, setSelectedYear] = useState('2022');
   const [selectedType, setSelectedType] = useState('prelims');
   const [selectedGrade, setSelectedGrade] = useState('10th');
-  const driveItems = useGoogleDrive(folderStructure[selectedYear][selectedType][selectedGrade]);
+  // const driveItems = useGoogleDrive(folderStructure[selectedYear][selectedType][selectedGrade]);
+  const [driveItems,setDriveItems]=useState([])
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const Select=folderStructure[selectedYear][selectedType][selectedGrade]
+      const response = await fetch(`http://localhost:3030/api/files?folderId=${Select}`);
+      const data = await response.json(); // Parse the JSON response
+      setDriveItems(data.files);  // Update this line
+      console.log(data.files, "dd");
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      setLoading(false);
+    }
+  };
+
+  fetchData();
+}, [selectedYear,selectedType,selectedGrade]); 
   console.log(folderStructure[selectedYear][selectedType][selectedGrade])
   console.log(driveItems)
   const openPDF = (webContentLink) => {
@@ -150,7 +167,7 @@ const PreviousQuestionPaper = () => {
     <span className="loader"></span>
   </div>
 ) : (
-  driveItems.length > 0 ? (
+  driveItems ? (
     <React.Fragment>
       {driveItems.map((item, index) => (
         <tr key={item.id}>

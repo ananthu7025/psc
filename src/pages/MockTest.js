@@ -113,7 +113,7 @@ const MockTest = ({ fetchedQuestions,setFetchedQuestions }) => {
           <section className="question-section">
             <div className="question">
               <h2 className="question-num">Question {currentQuestionIndex + 1}</h2>
-              <p className="question-text">{fetchedQuestions[currentQuestionIndex].questionText}</p>
+              <p style={{fontWeight:"600",color:"black"}} className="question-text">{fetchedQuestions[currentQuestionIndex].questionText}</p>
               <div className="answer">
                 {fetchedQuestions[currentQuestionIndex].options.map((option, optIndex) => (
                   <label key={optIndex}
@@ -124,7 +124,7 @@ const MockTest = ({ fetchedQuestions,setFetchedQuestions }) => {
                       name={`option_${currentQuestionIndex}`}
                       onChange={() => handleAnswerSelection(option)}
                     />
-                    <span>{option}</span>
+                    <span style={{fontWeight:"500",color:"black"}}>{option}</span>
                   </label>
                 ))}
               </div>

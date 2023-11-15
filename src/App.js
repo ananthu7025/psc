@@ -15,13 +15,16 @@ import MockTest from './pages/MockTest';
 import PreviousQuestionPaper from './pages/PreviousQuestionPaper';
 import Profile from './pages/Profile';
 import PscBullettin from './pages/PscBullettin';
-import PscNotification from './pages/PscNotifications';
 import SpecialTopic from './pages/SpecialTopic';
 import StudyPlan from './pages/StudyPlan';
 import Subscribition from './pages/Subscribition';
 import Syllabus from './pages/Syllabus';
 import LoginPage from './pages/LoginPage';
 import QuizCat from './pages/QuizCat';
+import CurrentAffairs from './pages/CurrentAffairs';
+import EXAMCALENDERSYLLABUS from './pages/EXAM CALENDER & SYLLABUS';
+import Referal from './pages/Admin/Referal';
+import UserList from './pages/Admin/UserList';
 function App() {
   return (
     <Provider store={Store}>
@@ -79,10 +82,10 @@ function App() {
           }
         />
         <Route
-          path="PscNotifications"
+          path="EXAMCALENDER&SYLLABUS"
           element={
             <Layout>
-              <PscNotification />
+              <EXAMCALENDERSYLLABUS />
             </Layout>
           }
         />
@@ -111,10 +114,26 @@ function App() {
           }
         />
         <Route
-          path="Syllabus"
+          path="CurrentAffairs"
           element={
             <Layout>
-              <Syllabus/>
+              <CurrentAffairs/>
+            </Layout>
+          }
+        />
+         <Route
+          path="Referal"
+          element={
+            <Layout>
+              <Referal/>
+            </Layout>
+          }
+        />
+        <Route
+          path="User"
+          element={
+            <Layout>
+              <UserList/>
             </Layout>
           }
         />
