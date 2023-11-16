@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import images from '../images';
+import { BASE_URL } from '../api/modules/api';
+import toast from 'react-hot-toast';
 
 const ExamCalander = () => {
   const folderIds = {
@@ -8,24 +10,23 @@ const ExamCalander = () => {
   };
 
   const [selectedYear, setSelectedYear] = useState('2023');
-  // const driveItems = useGoogleDrive(folderIds[selectedYear]);
-const [driveItems,setDriveItems]=useState([])
-useEffect(() => {
-  const fetchData = async () => {
-    try {
-      const response = await fetch(`http://localhost:3030/api/files?folderId=${folderIds[selectedYear]}`);
-      const data = await response.json(); // Parse the JSON response
-      setDriveItems(data.files);  // Update this line
-      console.log(data.files, "dd");
-      setLoading(false);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      setLoading(false);
-    }
-  };
+  const [driveItems, setDriveItems] = useState([])
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`${BASE_URL}/api/files?folderId=${folderIds[selectedYear]}`);
+        const data = await response.json();
+        setDriveItems(data.files);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        toast.error("Error fetching data:")
+        setLoading(false);
+      }
+    };
 
-  fetchData();
-}, [selectedYear]); 
+    fetchData();
+  }, [selectedYear]);
   const openPDF = (webContentLink) => {
     window.open(webContentLink, '_blank');
   };
@@ -36,12 +37,10 @@ useEffect(() => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-        setTimeout(() => setLoading(false), 5000); 
+    setTimeout(() => setLoading(false), 5000);
   }, []);
-  const reversedList = driveItems?.slice()?.reverse()
-console.log(reversedList)
   return (
-    <div style={{minHeight:"90vh"}} className="container-fluid py-4">
+    <div style={{ minHeight: "90vh" }} className="container-fluid py-4">
       <div className="row">
         <div className="col-12">
           <div className="row"></div>
@@ -61,7 +60,6 @@ console.log(reversedList)
                         <h6 className="mb-0">Home - EXAM CALENDER & SYLLABUS</h6>
                       </div>
                       <div className="col-6 text-end">
-                        <input className="input-search" type="text" placeholder="Search" />
                         <select
                           className="input-search"
                           name="year"
@@ -69,7 +67,7 @@ console.log(reversedList)
                           value={selectedYear}
                           onChange={handleYearChange}
                         >
-                          {Object.keys(folderIds).map((year) => (
+                          {Object?.keys(folderIds)?.map((year) => (
                             <option key={year} value={year}>
                               {year}
                             </option>
@@ -87,52 +85,52 @@ console.log(reversedList)
                       </tr>
                     </thead>
                     <tbody>
-                    {loading ? (
-  <div style={{ display: "flex", justifyContent: "center", marginLeft: "280px", marginBottom: "100px",textAlign:"center" }}>
-    <span className="loader"></span>
-  </div>
-) : (
-  driveItems  ? (
-    driveItems?.slice()?.reverse()?.map((item, index) => (
-      <tr key={item.id}>
-      <td>
-        <div className="d-flex px-2 py-1">
-          <p className="text-xs font-weight-bold mb-0">{selectedYear}</p>
-        </div>
-      </td>
-      <td className="align-middle">
-        <a
-          href="javascript:;"
-          className="text-secondary font-weight-bold text-xs"
-          data-toggle="tooltip"
-          data-original-title="Edit user"
-        >
-          {item.name}
-        </a>
-      </td>
-      <td className="align-middle">
-        <a
-          href="javascript:;"
-          className="text-secondary font-weight-bold text-xs"
-          data-toggle="tooltip"
-          data-original-title="Edit user"
-          onClick={() => openPDF(item.webViewLink)}
-        >
-          Download
-        </a>
-      </td>
-    </tr>
-    ))
-  ) : (
-    <tr>
-      <td colSpan="3" className="text-center">
-        <img style={{ width: "200px", height: "230px" }} src={images.empty} alt="Empty" />
-        <p>No data found</p>
-      </td>
-    </tr>
-  )
-)}
-                     
+                      {loading ? (
+                        <div style={{ display: "flex", justifyContent: "center", marginLeft: "280px", marginBottom: "100px", textAlign: "center" }}>
+                          <span className="loader"></span>
+                        </div>
+                      ) : (
+                        driveItems && driveItems ? (
+                          driveItems?.slice()?.reverse()?.map((item, index) => (
+                            <tr key={item.id}>
+                              <td>
+                                <div className="d-flex px-2 py-1">
+                                  <p className="text-xs font-weight-bold mb-0">{selectedYear||"-"}</p>
+                                </div>
+                              </td>
+                              <td className="align-middle">
+                                <a
+                                  href="javascript:;"
+                                  className="text-secondary font-weight-bold text-xs"
+                                  data-toggle="tooltip"
+                                  data-original-title="Edit user"
+                                >
+                                  {item?.name}
+                                </a>
+                              </td>
+                              <td className="align-middle">
+                                <a
+                                  href="javascript:;"
+                                  className="text-secondary font-weight-bold text-xs"
+                                  data-toggle="tooltip"
+                                  data-original-title="Edit user"
+                                  onClick={() => openPDF(item?.webViewLink)}
+                                >
+                                  Download
+                                </a>
+                              </td>
+                            </tr>
+                          ))
+                        ) : (
+                          <tr>
+                            <td colSpan="3" className="text-center">
+                              <img style={{ width: "200px", height: "230px" }} src={images.empty} alt="Empty" />
+                              <p>No data found</p>
+                            </td>
+                          </tr>
+                        )
+                      )}
+
                     </tbody>
                   </table>
                 </div>

@@ -3,21 +3,18 @@ import images from '../../images';
 import { useGetReferalQuery } from '../../api/modules/admin';
 
 const Referal = () => {
-    const [person, setPerson] = useState()
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        setTimeout(() => setLoading(false), 5000);
+        setTimeout(() => setLoading(false), 2000);
     }, []);
 
-    const { data, error: fetchError, isLoading: fetchIsLoading, refetch } = useGetReferalQuery();
-    console.log(data)
+    const { data } = useGetReferalQuery();
     return (
         <div style={{ minHeight: "90vh" }} className="container-fluid py-4">
             <div className="row">
                 <div className="col-12">
                     <div className="row"></div>
-
                     <div className="card my-4">
                         <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                             <div className="bg-gradient-success shadow-primary border-radius-lg pt-4 pb-3">
@@ -41,18 +38,17 @@ const Referal = () => {
                                                 <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Referee Email(person who got that referal)</th>
                                             </tr>
                                         </thead>
-
                                         <tbody style={{ marginLeft: "50px" }}>
                                             {loading ? (
                                                 <div style={{ display: "flex", justifyContent: "center", marginLeft: "280px", marginBottom: "100px", textAlign: "center" }}>
                                                     <span className="loader"></span>
                                                 </div>
                                             ) : (
-                                                data.length > 0 ? (
-                                                    data.map((item, index) => (
+                                                data && data?.length > 0 ? (
+                                                    data?.map((item, index) => (
                                                         <tr key={item.id}>
-                                                            <td style={{ marginLeft: "50px" }}>{item.referrerEmail}</td>
-                                                            <td>{item.refereeEmail}</td>
+                                                            <td style={{ marginLeft: "50px" }}>{item?.referrerEmail}</td>
+                                                            <td>{item?.refereeEmail}</td>
 
                                                         </tr>
                                                     ))

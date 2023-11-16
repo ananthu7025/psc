@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import images from '../images';
+import { BASE_URL } from '../api/modules/api';
 
 const SpecialTopic = () => {
   const [driveItems, setDriveItems] = useState([]);
@@ -8,9 +9,9 @@ const SpecialTopic = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://localhost:3030/api/folder/files?folderId=174PLxquGWuddRVYF-TMlTqaUM-dr7ikV`);
-        const data = await response.json(); // Parse the JSON response
-        setDriveItems(data.subfolders); // Update this line
+        const response = await fetch(`${BASE_URL}/api/folder/files?folderId=174PLxquGWuddRVYF-TMlTqaUM-dr7ikV`);
+        const data = await response.json(); 
+        setDriveItems(data?.subfolders);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -52,23 +53,23 @@ const SpecialTopic = () => {
                     </div>
                   ) : (
                     <div style={{ marginLeft: "30px" }} className="accordion" id="accordion">
-                      {driveItems ? (
+                      {driveItems&& driveItems ? (
                         driveItems.map((subfolder, index) => (
                           <div className="accordion-item" key={index}>
                             <div style={{ justifyContent: "space-between" }} className='d-flex'>
                               <h2 className="accordion-header" id={`heading-${index}`}>
                                 <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target={`#collapse-${index}`} aria-expanded="true" aria-controls={`collapse-${index}`}>
-                                  {subfolder.folderName}
+                                  {subfolder?.folderName}
                                 </button>
                               </h2>
                               <img data-bs-toggle="collapse" data-bs-target={`#collapse-${index}`} aria-expanded="true" aria-controls={`collapse-${index}`} style={{ width: "40px", height: "25px", marginRight: "30px" }} src={images.down} />
                             </div>
                             <div id={`collapse-${index}`} className="accordion-collapse collapse" aria-labelledby={`heading-${index}`} data-bs-parent="#accordion">
                               <div className="accordion-body">
-                                {subfolder.files.map((file, idx) => (
+                                {subfolder?.files?.map((file, idx) => (
                                   <div key={idx}>
                                     <ul>
-                                      <li style={{ cursor: "pointer" }} onClick={() => openPDF(file.webViewLink)}>{file.name}</li>
+                                      <li style={{ cursor: "pointer" }} onClick={() => openPDF(file?.webViewLink)}>{file?.name}</li>
                                     </ul>
                                   </div>
                                 ))}

@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useGetUserDetailsQuery } from '../api/modules/login';
+import images from '../images';
 
 const Sidebar = () => {
   const location = useLocation();
   const currentPath = location.pathname;
-  const [isRefech,setIsRefech]=useState(false)
-  const { data,refetch } = useGetUserDetailsQuery(); 
+  const [isRefech, setIsRefech] = useState(false)
+  const { data, refetch } = useGetUserDetailsQuery();
   useEffect(() => {
     refetch()
   }, [isRefech])
-    
-  console.log(data?.isAdmin,"sss");
+
   return (
     <aside
       className="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3 bg-gradient-dark"
@@ -19,8 +19,8 @@ const Sidebar = () => {
     >
       <div className="sidenav-header">
         <i className="fas fa-times p-3 cursor-pointer text-white opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
-        <a className="navbar-brand m-0" href="https://demos.creative-tim.com/material-dashboard/pages/dashboard" target="_blank">
-          <img src="../assets/img/logo-ct.png" className="navbar-brand-img h-100" alt="main_logo" />
+        <a className="navbar-brand m-0" target="_blank">
+          <img style={{ width: "70px", borderRadius: "24%", marginRight: "10px" }} src={images.logo} className="navbar-brand-img h-100" alt="main_logo" />
           <span className="ms-1 font-weight-bold text-white">PSC Green</span>
         </a>
       </div>
@@ -49,7 +49,7 @@ const Sidebar = () => {
               <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                 <i className="material-icons opacity-10">notifications</i>
               </div>
-              <span style={{fontSize:"11px"}} className="nav-link-text ms-1">EXAM CALENDER & SYLLABUS</span>
+              <span style={{ fontSize: "11px" }} className="nav-link-text ms-1">EXAM CALENDER & SYLLABUS</span>
             </Link>
           </li>
           <li class="nav-item">
@@ -105,29 +105,42 @@ const Sidebar = () => {
           </li>
           {
             data?.isAdmin ?
-            <li class="nav-item">
+              <li class="nav-item">
 
-            <Link to="/Referal" className={`nav-link ${currentPath === '/Referal' ? 'active bg-gradient-success' : ''}`}>
-              <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                <i className="material-icons opacity-10">person</i>
-              </div>
-              <span className="nav-link-text ms-1">Referal</span>
-            </Link>
-          </li>
-          :null
+                <Link to="/Referal" className={`nav-link ${currentPath === '/Referal' ? 'active bg-gradient-success' : ''}`}>
+                  <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                    <i className="material-icons opacity-10">person</i>
+                  </div>
+                  <span className="nav-link-text ms-1">Referal</span>
+                </Link>
+              </li>
+              : null
           }
           {
             data?.isAdmin ?
-            <li class="nav-item">
+              <li class="nav-item">
 
-            <Link to="/User" className={`nav-link ${currentPath === '/User' ? 'active bg-gradient-success' : ''}`}>
-              <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                <i className="material-icons opacity-10">person</i>
-              </div>
-              <span className="nav-link-text ms-1">User List</span>
-            </Link>
-          </li>
-          :null
+                <Link to="/User" className={`nav-link ${currentPath === '/User' ? 'active bg-gradient-success' : ''}`}>
+                  <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                    <i className="material-icons opacity-10">person</i>
+                  </div>
+                  <span className="nav-link-text ms-1">User List</span>
+                </Link>
+              </li>
+              : null
+          }
+          {
+            data?.isAdmin ?
+              <li class="nav-item">
+
+                <Link to="/questions" className={`nav-link ${currentPath === '/questions' ? 'active bg-gradient-success' : ''}`}>
+                  <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                    <i className="material-icons opacity-10">assignment</i>
+                  </div>
+                  <span className="nav-link-text ms-1">Question</span>
+                </Link>
+              </li>
+              : null
           }
         </ul>
       </div>

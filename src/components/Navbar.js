@@ -1,6 +1,9 @@
 import React from 'react'
+import { useLocation } from 'react-router-dom';
 
 const Navbar = () => {
+  const location = useLocation();
+  const currentPath = location.pathname;
   return (
     <nav
     className="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl"
@@ -15,14 +18,9 @@ const Navbar = () => {
               Pages
             </a>
           </li>
-          <li
-            className="breadcrumb-item text-sm text-dark active"
-            aria-current="page"
-          >
-            Template
-          </li>
+        
         </ol>
-        <h6 className="font-weight-bolder mb-0">Template</h6>
+        <h6 className="font-weight-bolder mb-0">{currentPath}</h6>
       </nav>
       <div
         className="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4"

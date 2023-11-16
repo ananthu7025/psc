@@ -4,7 +4,7 @@ import storage from 'redux-persist/lib/storage';
 import reducers from './reducers';
 import { api } from '../api/index';
 import { setupListeners } from '@reduxjs/toolkit/query/react';
-import { createLogger } from 'redux-logger'; // Import createLogger as a named export
+import { createLogger } from 'redux-logger'; 
 
 const persistConfig = {
     key: 'root',

@@ -1,0 +1,259 @@
+import React, { useEffect, useState } from 'react';
+import { useCreateQuestionMutation } from '../../api/modules/quiz.Module';
+import toast from 'react-hot-toast';
+import { useNavigate, useParams } from 'react-router-dom';
+import { BASE_URL } from '../../api/modules/api';
+
+const CreateQuestionComponent = () => {
+  const { questionId } = useParams();
+  const [formData, setFormData] = useState({
+    category: '',
+    subCategory: '',
+    questionText: '',
+    options: [""],
+    correctAnswer: 0,
+  });
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (questionId) {
+        try {
+          const response = await fetch(`${BASE_URL}/get-question/${questionId}`);
+          const questionData = await response.json();
+
+          setFormData({
+            category: questionData.category,
+            subCategory: questionData.subCategory,
+            questionText: questionData.questionText,
+            options: [...questionData.options],
+            correctAnswer: questionData.correctAnswer,
+          });
+        } catch (error) {
+          console.error('Error fetching question by ID', error);
+        }
+      }
+    };
+
+    fetchData();
+  }, [questionId]);
+  const [createQuestion, { isLoading, isError }] = useCreateQuestionMutation();
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleOptionChange = (e, index) => {
+    const newOptions = [...formData.options];
+    newOptions[index] = e.target.value;
+    setFormData({ ...formData, options: newOptions });
+  };
+
+
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      if (questionId) {
+        await fetch(`${BASE_URL}/edit-question/${questionId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+
+        toast.success('Question updated successfully');
+        navigate(`/questions`);
+
+      } else {
+        await fetch(`${BASE_URL}/create-question`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+
+        toast.success('Question created successfully');
+        navigate(`/questions`);
+
+      }
+
+    } catch (error) {
+      console.error('Error creating/editing question', error);
+    }
+  };
+
+  const handleCorrectAnswerChange = (e) => {
+    const correctAnswer = parseInt(e.target.value, 10);
+    setFormData({ ...formData, correctAnswer });
+  };
+
+  return (
+    <div style={styles.container}>
+      <form onSubmit={handleFormSubmit} style={styles.form}>
+        <div className="row">
+          <div className="col-md-6">
+            <label style={styles.label}>
+              Category:
+              <input
+                type="text"
+                name="category"
+                value={formData.category}
+                onChange={handleInputChange}
+                style={styles.input}
+              />
+            </label>
+          </div>
+          <div className="col-md-6">
+            <label style={styles.label}>
+              Subcategory:
+              <input
+                type="text"
+                name="subCategory"
+                value={formData.subCategory}
+                onChange={handleInputChange}
+                style={styles.input}
+              />
+            </label>
+          </div>
+        </div>
+
+        <label style={styles.label}>
+          Question Text:
+          <textarea
+            name="questionText"
+            value={formData.questionText}
+            onChange={handleInputChange}
+            style={styles.textarea}
+          />
+        </label>
+
+        <div className="row">
+          <div className="col-md-6">
+            <label style={styles.label}>
+              Options:
+              {formData.options.map((option, index) => (
+                <div key={index} style={styles.optionContainer}>
+                  <input
+                    type="text"
+                    value={option}
+                    onChange={(e) => handleOptionChange(e, index)}
+                    style={styles.input}
+                  />
+                </div>
+              ))}
+            </label>
+            <button
+              type="button"
+              onClick={() => setFormData({ ...formData, options: [...formData.options, ''] })}
+              style={styles.addButton}
+            >
+              Add Option
+            </button>
+          </div>
+          <div className="col-md-6">
+            <label style={styles.label}>
+              Correct Answer:
+              <select
+                name="correctAnswer"
+                value={formData.correctAnswer}
+                onChange={handleCorrectAnswerChange}
+                style={styles.input}
+              >
+                {formData.options.map((option, index) => (
+                  <option key={index} value={index}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+        </div>
+
+        <button type="submit" disabled={isLoading} style={styles.submitButton}>
+          {isLoading ? 'Saving...' : 'Save'}
+        </button>
+      </form>
+
+      {isError && <p style={styles.error}>Error creating question</p>}
+    </div>
+  );
+};
+
+const styles = {
+  container: {
+    maxWidth: '1000px',
+    margin: 'auto',
+    padding: '20px',
+    border: '1px solid #ddd',
+    borderRadius: '8px',
+    marginTop: '50px',
+    minHeight: "81vh"
+  },
+  heading: {
+    textAlign: 'center',
+    marginBottom: '20px',
+  },
+  form: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  label: {
+    margin: '10px 0',
+  },
+  input: {
+    width: '100%',
+    padding: '8px',
+    margin: '5px 0',
+    boxSizing: 'border-box',
+
+    marginTop: '0.135em',
+    verticalAlign: 'top',
+    backgroundColor: '#fff',
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center',
+    backgroundSize: 'contain',
+    border: 'none',
+    appearance: 'none',
+    printColorAdjust: 'exact',
+    transition: 'background-color 0.25s ease, border-color 0.25s ease, background-position 0.15s ease-in-out, opacity 0.15s ease-out, box-shadow 0.15s ease-in-out',
+  },
+  textarea: {
+    width: '100%',
+    padding: '8px',
+    margin: '5px 0',
+    boxSizing: 'border-box',
+    minHeight: '100px',
+  },
+  optionContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  addButton: {
+    backgroundColor: '#4CAF50',
+    color: 'white',
+    padding: '10px',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
+    marginBottom: '10px',
+    marginLeft: "10px"
+  },
+  submitButton: {
+    backgroundColor: '#008CBA',
+    color: 'white',
+    padding: '10px',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
+  },
+  error: {
+    color: 'red',
+    marginTop: '10px',
+  },
+};
+
+export default CreateQuestionComponent;

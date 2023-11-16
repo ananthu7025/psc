@@ -11,7 +11,7 @@ const LoginPage = () => {
   const [otp, setOtp] = useState(['', '', '', '']);
   const [isOtpSent, setIsOtpSent] = useState(false);
   const [isResendDisabled, setIsResendDisabled] = useState(true);
-  const [resendCountdown, setResendCountdown] = useState(60); 
+  const [resendCountdown, setResendCountdown] = useState(60);
   const navigate = useNavigate();
   const [login, { isLoading: isLoginLoading }] = useLoginMutation();
   const [signUp, { isLoading: isSignUpLoading }] = useSignUpMutation();
@@ -52,15 +52,12 @@ const LoginPage = () => {
     try {
       const otpValue = otp.join('');
       const res = await signUp({ email, otp: otpValue });
-      console.log(res.data);
-  
       if (res.data) {
         toast.success(res.data.message);
       }
-  debugger
       if (res.data.user.isCreated) {
         if (res.data.user.isPaid) {
-          navigate('/home');
+          navigate('/Profile');
         } else {
           navigate('/payment');
         }
@@ -70,9 +67,10 @@ const LoginPage = () => {
     } catch (error) {
       console.error('SignUp Error:', error);
       toast.error('Something went wrong');
+      navigate('/');
     }
   };
-  
+
 
   const handlePaste = (e) => {
     e.preventDefault();
@@ -83,13 +81,15 @@ const LoginPage = () => {
   };
 
   const [resendOtp, { isLoading: isResendOtpLoading }] = useResendOtpMutation();
-  const handleResend = async () => {
+
+  const handleResend = async (e) => {
     try {
+      e.preventDefault();
       const response = await resendOtp({ email });
       if (response.data.message) {
         toast.success(response.data.message);
         setIsResendDisabled(true);
-        setResendCountdown(60); 
+        setResendCountdown(60);
       }
     } catch (error) {
       toast.error('Something went wrong while resending OTP');
@@ -103,13 +103,13 @@ const LoginPage = () => {
           <div className="container">
             <div className="row">
               <div className="col-6 d-lg-flex d-none h-100 my-auto pe-0 position-absolute top-0 start-0 text-center justify-content-center flex-column">
-              <div
-              className="position-relative bg-gradient-primary h-100 m-3 px-7 border-radius-lg d-flex flex-column justify-content-center"
-              style={{
-                backgroundImage: 'url("../assets/img/create kerala t 0.png")',
-                backgroundSize: "cover"
-              }}
-            ></div>
+                <div
+                  className="position-relative bg-gradient-primary h-100 m-3 px-7 border-radius-lg d-flex flex-column justify-content-center"
+                  style={{
+                    backgroundImage: 'url("../assets/img/create kerala t 0.png")',
+                    backgroundSize: "cover"
+                  }}
+                ></div>
               </div>
               <div className="col-xl-4 col-lg-5 col-md-7 d-flex flex-column ms-auto me-auto ms-lg-auto me-lg-5">
                 <div className="card card-plain">
@@ -124,10 +124,10 @@ const LoginPage = () => {
                       <form role="form">
                         <div className="input-group input-group-outline mb-3 focused">
                           <input
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          placeholder='Enter Your Mail Id'
-                          type="email" className="form-control " />
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            placeholder='Enter Your Mail Id'
+                            type="email" className="form-control " />
                         </div>
                         <div className="form-check form-check-info text-start ps-0">
                           <input
@@ -151,7 +151,7 @@ const LoginPage = () => {
                             onClick={handleEmailSubmit}
                             disabled={isLoginLoading}
                           >
-                                              {isLoginLoading ? 'Logging In...' : 'Send OTP'}
+                            {isLoginLoading ? 'Logging In...' : 'Send OTP'}
 
                           </button>
                         </div>
@@ -159,44 +159,35 @@ const LoginPage = () => {
                     ) : (
                       <form role="form" className="otp-div">
                         <div className="otp-field">
-                        {otp.map((digit, index) => (
-                      <input
-                        type="text"
-                        className="otp-digit"
-                        key={index}
-                        maxLength="1"
-                        value={digit}
-                        onChange={(e) => handleOtpChange(index, e.target.value)}
-                        onPaste={handlePaste}
-                      />
-                    ))}
+                          {otp.map((digit, index) => (
+                            <input
+                              type="text"
+                              className="otp-digit"
+                              key={index}
+                              maxLength="1"
+                              value={digit}
+                              onChange={(e) => handleOtpChange(index, e.target.value)}
+                              onPaste={handlePaste}
+                            />
+                          ))}
                         </div>
                         <div className="text-center">
-                       
-                            <button
-                                                className="btn btn-lg bg-gradient-success btn-lg w-100 mt-4 mb-0"
 
-                      onClick={handleOtpSubmit}
-                      disabled={isSignUpLoading}
-                    >
-                      {isSignUpLoading ? 'Verifying OTP...' : 'Verify OTP'}
-                    </button>
-                          
+                          <button
+                            className="btn btn-lg bg-gradient-success btn-lg w-100 mt-4 mb-0"
+
+                            onClick={handleOtpSubmit}
+                            disabled={isSignUpLoading}
+                          >
+                            {isSignUpLoading ? 'Verifying OTP...' : 'Verify OTP'}
+                          </button>
+                          <button className="button-as-text" style={{ marginTop: "20px", textDecoration: "none", color: "black" }} onClick={handleResend}>Resend Otp</button>
+
                         </div>
                       </form>
                     )}
                   </div>
-                  <div className="card-footer text-center pt-0 px-lg-2 px-1">
-                    <p className="mb-2 text-sm mx-auto">
-                      Already have an account?
-                      <Link
-                        to="/createprofile"
-                        className="text-success text-gradient font-weight-bold"
-                      >
-                        Sign in
-                      </Link>
-                    </p>
-                  </div>
+                
                 </div>
               </div>
             </div>

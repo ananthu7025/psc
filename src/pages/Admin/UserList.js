@@ -1,17 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import images from '../../images';
-import { useGetAllUserQuery } from '../../api/modules/admin';
+import { useGetAllUserQuery, useUpdateIsPaidStatusMutation } from '../../api/modules/admin';
+import toast from 'react-hot-toast';
 
 const UserList = () => {
-    const [person, setPerson] = useState()
+
     const [loading, setLoading] = useState(true);
-
     useEffect(() => {
-        setTimeout(() => setLoading(false), 5000);
+        setTimeout(() => setLoading(false), 2000);
     }, []);
-    const { data, error: fetchError, isLoading: fetchIsLoading, refetch } = useGetAllUserQuery();
+    const { data, refetch } = useGetAllUserQuery();
+    const [updateIsPaidStatus] = useUpdateIsPaidStatusMutation();
+    const handleIsPaidToggle = async (userId, currentIsPaidStatus) => {
+        try {
+            const newIsPaidStatus = !currentIsPaidStatus;
+            const response = await updateIsPaidStatus({ userId, isPaid: newIsPaidStatus });
+            toast.success("Marked User Paid")
+            refetch();
+        } catch (error) {
+            console.error("Error updating isPaid status:", error);
+            toast.success("Error updating User")
 
-    console.log(data)
+        }
+    };
     return (
         <div style={{ minHeight: "90vh" }} className="container-fluid py-4">
             <div className="row">
@@ -42,8 +53,6 @@ const UserList = () => {
                                                 <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">District</th>
                                                 <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Phone</th>
                                                 <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">IsPaid</th>
-
-
                                             </tr>
                                         </thead>
 
@@ -53,22 +62,20 @@ const UserList = () => {
                                                     <span className="loader"></span>
                                                 </div>
                                             ) : (
-                                                data.length > 0 ? (
-                                                    data.map((item, index) => (
-                                                        <tr key={item.id}>
-                                                            <td style={{ marginLeft: "50px" }}>{item.email}</td>
-                                                            <td>{item.name}</td>
-                                                            <td>{item.district}</td>
-                                                            <td>{item.phone}</td>
+                                                data && data?.length > 0 ? (
+                                                    data?.map((item, index) => (
+                                                        <tr key={item?.id}>
+                                                            <td style={{ marginLeft: "50px" }}>{item?.email}</td>
+                                                            <td>{item?.name}</td>
+                                                            <td>{item?.district}</td>
+                                                            <td>{item?.phone}</td>
                                                             <td>
-                                        <input
-                                            type="checkbox"
-                                            checked={item.isPaid}
-                                            // onChange={() => handleToggle(item._id, item.isPaid)}
-                                        />
-                                    </td>
-
-
+                                                                <input
+                                                                    type="checkbox"
+                                                                    checked={item?.isPaid}
+                                                                    onChange={() => handleIsPaidToggle(item?._id, item?.isPaid)}
+                                                                />
+                                                            </td>
                                                         </tr>
                                                     ))
                                                 ) : (

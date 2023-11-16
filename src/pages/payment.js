@@ -1,67 +1,49 @@
-import axios from "axios";
-import { useState } from "react";
-
+import './payment.css'
+import images from "../images";
 
 function Payment() {
-	const [book, setBook] = useState({
-		name: "The Fault In Our Stars",
-		author: "John Green",
-		img: "https://images-na.ssl-images-amazon.com/images/I/817tHNcyAgL.jpg",
-		price: 250,
-	});
 
-	const initPayment = (data) => {
-		const options = {
-			key: "rzp_test_h8IfBaZ34VQ0c6",
-			amount: data.amount,
-			currency: data.currency,
-			name: book.name,
-			description: "Test Transaction",
-			image: book.img,
-			order_id: data.id,
-			handler: async (response) => {
-				try {
-					const verifyUrl = "http://localhost:3030/api/payment/verify";
-					const { data } = await axios.post(verifyUrl, response);
-					console.log(data);
-				} catch (error) {
-					console.log(error);
-				}
-			},
-			theme: {
-				color: "#3399cc",
-			},
-		};
-		const rzp1 = new window.Razorpay(options);
-		rzp1.open();
-	};
+  const handleContactUs = () => {
+    const recipientEmail = "pscgreen.learning@gmail.com";
+    const subject = "PSC GREEN Inquiry";
+    const body = "Hello PSC GREEN team,\n\nI have a question about your services. Can you please provide more information?\n\nThank you!";
+    const mailtoLink = `mailto:${recipientEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = mailtoLink;
+  };
+  
+  return (
+    <div>
+      <div className="main-payment">
+        <div style={{ marginTop: "-30px" }} className="lefttext">
+          <div className="textwrap">
+            <h1>PSC GREEN</h1>
+            <p>Subscribe to PSC GREEN and  get access to our resources. Take part in mock tests designed to enhance your learning experience and open up opportunities for a career in the Public Service Commission (PSC) jobs.</p>
+            <div style={{ margin: "20px" }} className="subscription-options">
+              <label>
+                Standard -Rs 250 (1 year)
+                <p>Refer a friend for Standard plan and get Rs 100 cashback!</p>
+              </label>
+              <label>
+                Premium -Rs 450 (2 year)
+                <p>Refer a friend for Premium plan and get Rs 200 cashback!</p>
+              </label>
+              <label>
+                Our UPI
+                pscgreenlearning@ybl
+              </label>
+            </div>
+            <button onClick={handleContactUs}>Contact Us</button>
+          </div>
+        </div>
+        <div style={{ marginTop: "50px" }} className="rightimage">
+          <img style={{ marginTop: "50px" }} src={images.qr} />
+        </div>
+      </div>
+    </div>
 
-	const handlePayment = async () => {
-		try {
-			const orderUrl = "http://localhost:3030/api/payment/orders";
-			const { data } = await axios.post(orderUrl, { amount: book.price });
-			console.log(data);
-			initPayment(data.data);
-		} catch (error) {
-			console.log(error);
-		}
-	};
 
-	return (
-		<div className="App">
-			<div className="book_container">
-				<img src={book.img} alt="book_img" className="book_img" />
-				<p className="book_name">{book.name}</p>
-				<p className="book_author">By {book.author}</p>
-				<p className="book_price">
-					Price : <span>&#x20B9; {book.price}</span>
-				</p>
-				<button onClick={handlePayment} className="buy_btn">
-					buy now
-				</button>
-			</div>
-		</div>
-	);
+
+  );
 }
 
 export default Payment;

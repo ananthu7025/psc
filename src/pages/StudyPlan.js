@@ -48,7 +48,7 @@ const StudyPlan = () => {
                     </div>
                   ) : (
                     <div className="accordion" id="accordion">
-                      {studyData.slice().reverse().map((subject, subjectIndex) => (
+                      {studyData && studyData?.slice()?.reverse()?.map((subject, subjectIndex) => (
                         <div className="accordion-item" key={subjectIndex}>
                           <div style={{ display: 'flex', justifyContent: 'space-between', marginLeft: '30px' }}>
                             <h2 className="accordion-header">
@@ -61,7 +61,7 @@ const StudyPlan = () => {
                                 aria-expanded="true"
                                 aria-controls={`collapse-${subjectIndex}`}
                               >
-                                {subject.name}
+                                {subject?.name}
                               </button>
                             </h2>
                             <img
@@ -81,26 +81,26 @@ const StudyPlan = () => {
                             aria-labelledby={`heading-${subjectIndex}`}
                             data-bs-parent="#accordion"
                           >
-                       <div className="accordion-body">
-  {subject.subfolders
-    .sort((a, b) => {
-      const dayA = parseInt(a.name.match(/\d+/)); // Extract the number from 'DAYX'
-      const dayB = parseInt(b.name.match(/\d+/));
-      return dayA - dayB;
-    })
-    .map((day, dayIndex) => (
-      <div key={dayIndex}>
-        <h5 style={{ marginLeft: '70px' }}>{day.name}</h5>
-        {day.files.map((file, fileIndex) => (
-          <div key={fileIndex}>
-            <ul style={{ marginLeft: '90px' }}>
-              <li onClick={() => openPDF(file.webContentLink)}>{file.name}</li>
-            </ul>
-          </div>
-        ))}
-      </div>
-    ))}
-</div>
+                            <div className="accordion-body">
+                              {subject?.subfolders
+                                .sort((a, b) => {
+                                  const dayA = parseInt(a?.name?.match(/\d+/));
+                                  const dayB = parseInt(b?.name?.match(/\d+/));
+                                  return dayA - dayB;
+                                })
+                                .map((day, dayIndex) => (
+                                  <div key={dayIndex}>
+                                    <h5 style={{ marginLeft: '70px' }}>{day.name}</h5>
+                                    {day?.files?.map((file, fileIndex) => (
+                                      <div key={fileIndex}>
+                                        <ul style={{ marginLeft: '90px' }}>
+                                          <li onClick={() => openPDF(file?.webContentLink)}>{file.name}</li>
+                                        </ul>
+                                      </div>
+                                    ))}
+                                  </div>
+                                ))}
+                            </div>
 
                           </div>
                         </div>

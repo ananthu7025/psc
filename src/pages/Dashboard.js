@@ -1,290 +1,133 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { useGetResultQuery } from '../api/modules/quiz.Module';
+import { useGetUserDetailsQuery } from '../api/modules/login';
+import { useGetReferalQuery } from '../api/modules/admin';
+import toast from 'react-hot-toast';
+import images from '../images';
 
 const Dashboard = () => {
+  const [isRefech, setIsRefech] = useState(false)
+  const { data: user } = useGetUserDetailsQuery();
+  const { data, refetch } = useGetResultQuery(user?._id);
+  const { data: referal } = useGetReferalQuery();
+
+  useEffect(() => {
+
+    refetch()
+  }, [isRefech, user?._id])
+
+  const currentMonthScores = data
+    ? data.filter(
+      (result) =>
+        new Date(result.createdAt).getMonth() === new Date().getMonth()
+    )
+    : [];
+  const userReferralData = referal?.filter(
+    (referral) => referral.referrerEmail === user?.email
+  );
+  const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text)
+      .then(() => {
+        toast.success("referal code copied");
+
+      })
+      .catch(err => {
+        console.error('Failed to copy: ', err);
+        toast.error("Failed to copy")
+
+      });
+  };
   return (
-    <div className="container-fluid py-4">
-  <div className="row">
-    <div className="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-      <div className="card">
-        <div className="card-header p-3 pt-2">
-          <div className="icon icon-lg icon-shape bg-gradient-dark shadow-dark text-center border-radius-xl mt-n4 position-absolute">
-            <i className="material-icons opacity-10">weekend</i>
-          </div>
-          <div className="text-end pt-1">
-            <p className="text-sm mb-0 text-capitalize">Today's Money</p>
-            <h4 className="mb-0">$53k</h4>
-          </div>
-        </div>
-        <hr className="dark horizontal my-0" />
-        <div className="card-footer p-3">
-          <p className="mb-0">
-            <span className="text-success text-sm font-weight-bolder">
-              +55%{" "}
-            </span>
-            than last week
-          </p>
-        </div>
+    <div className="container-fluid py-4" style={{ minHeight: "90vh" }}>
+      <div className='mb-4 mt-3'>
+        <h3 style={{ fontSize: "15px", marginLeft: "20px" }}>Hi,<br /> {user?.name} Welcome back to PSC GREEN,</h3>
       </div>
-    </div>
-    <div className="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-      <div className="card">
-        <div className="card-header p-3 pt-2">
-          <div className="icon icon-lg icon-shape bg-gradient-primary shadow-primary text-center border-radius-xl mt-n4 position-absolute">
-            <i className="material-icons opacity-10">person</i>
-          </div>
-          <div className="text-end pt-1">
-            <p className="text-sm mb-0 text-capitalize">Today's Users</p>
-            <h4 className="mb-0">2,300</h4>
-          </div>
-        </div>
-        <hr className="dark horizontal my-0" />
-        <div className="card-footer p-3">
-          <p className="mb-0">
-            <span className="text-success text-sm font-weight-bolder">
-              +3%{" "}
-            </span>
-            than last month
-          </p>
-        </div>
-      </div>
-    </div>
-    <div className="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-      <div className="card">
-        <div className="card-header p-3 pt-2">
-          <div className="icon icon-lg icon-shape bg-gradient-success shadow-success text-center border-radius-xl mt-n4 position-absolute">
-            <i className="material-icons opacity-10">person</i>
-          </div>
-          <div className="text-end pt-1">
-            <p className="text-sm mb-0 text-capitalize">New Clients</p>
-            <h4 className="mb-0">3,462</h4>
-          </div>
-        </div>
-        <hr className="dark horizontal my-0" />
-        <div className="card-footer p-3">
-          <p className="mb-0">
-            <span className="text-danger text-sm font-weight-bolder">-2%</span>{" "}
-            than yesterday
-          </p>
-        </div>
-      </div>
-    </div>
-    <div className="col-xl-3 col-sm-6">
-      <div className="card">
-        <div className="card-header p-3 pt-2">
-          <div className="icon icon-lg icon-shape bg-gradient-info shadow-info text-center border-radius-xl mt-n4 position-absolute">
-            <i className="material-icons opacity-10">weekend</i>
-          </div>
-          <div className="text-end pt-1">
-            <p className="text-sm mb-0 text-capitalize">Sales</p>
-            <h4 className="mb-0">$103,430</h4>
-          </div>
-        </div>
-        <hr className="dark horizontal my-0" />
-        <div className="card-footer p-3">
-          <p className="mb-0">
-            <span className="text-success text-sm font-weight-bolder">
-              +5%{" "}
-            </span>
-            than yesterday
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div className="row mb-4 mt-4">
-    <div className="col-lg-8 col-md-6 mb-md-0 mb-4">
-      <div className="card">
-        <div className="card-header pb-0">
-          <div className="row">
-            <div className="col-lg-6 col-7">
-              <h6>Projects</h6>
-              <p className="text-sm mb-0">
-                <i className="fa fa-check text-info" aria-hidden="true" />
-                <span className="font-weight-bold ms-1">30 done</span> this
-                month
-              </p>
+      <div className="row mb-4 mt-4">
+        <div className="col-lg-6 col-md-6">
+          <div style={{ maxHeight: "500px", overflow: "auto" }} className="card h-100">
+            <div className="card-header pb-0">
+              <h6>Your Score</h6>
             </div>
-            <div className="col-lg-6 col-5 my-auto text-end">
-              <div className="dropdown float-lg-end pe-4">
-                <a
-                  className="cursor-pointer"
-                  id="dropdownTable"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
+            <div className="card-body p-3">
+              {currentMonthScores && currentMonthScores.length > 0 ? (
+                currentMonthScores?.map((result) => (
+                  <div key={result._id} className="timeline timeline-one-side">
+                    <div className="timeline-block mb-3">
+                      <span className="timeline-step">
+                        <i className="material-icons text-success text-gradient">
+                          assignment
+                        </i>
+                      </span>
+                      <div className="timeline-content">
+                        <h6 className="text-dark text-sm font-weight-bold mb-0">
+                          {new Date(result?.createdAt).toLocaleDateString()}
+                        </h6>
+                        <p className="text-secondary font-weight-bold text-xs mt-1 mb-0">
+                          Score: {result?.score}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div style={{ display: "flex", justifyContent: "center", flexDirection: "column" }}>
+                  <img style={{ width: "200px", height: "230px", marginLeft: "200px" }} src={images.empty} alt="Empty" />
+                  <p style={{ textAlign: "center" }}>No scores available for this month.</p>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+        <div className="col-lg-6 col-md-6">
+          <div className="card h-100" style={{ maxHeight: "500px", overflow: "auto" }}>
+            <div className="card-header pb-0">
+              <h6>Your Referal</h6>
+            </div>
+            <div className="card-body p-3">
+              {userReferralData && userReferralData.length > 0 ? (
+                userReferralData.map((result) => (
+                  <div key={result?._id} className="timeline timeline-one-side">
+                    <div className="timeline-block mb-3">
+                      <span className="timeline-step">
+                        <i className="material-icons text-success text-gradient">
+                          person
+                        </i>
+                      </span>
+                      <div className="timeline-content">
+                        <h6 className="text-dark text-sm font-weight-bold mb-0">
+                          {result?.refereeEmail}
+
+                        </h6>
+
+                      </div>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div style={{ display: "flex", justifyContent: "center", flexDirection: "column" }}>
+                  <img style={{ width: "200px", height: "230px", marginLeft: "200px" }} src={images.empty} alt="Empty" />
+                  <p style={{ textAlign: "center" }}>No Referals to show .</p>
+                </div>
+              )}
+              <div className="refer-box">
+                <h5 className="mb-1">Your Referral Code</h5>
+                <p>Share this code with your friends to earn rewards:</p>
+                <div
+                  style={{ display: "flex", justifyContent: "space-between" }}
+                  className="referral-code"
                 >
-                  <i className="fa fa-ellipsis-v text-secondary" />
-                </a>
-                <ul
-                  className="dropdown-menu px-2 py-3 ms-sm-n4 ms-n5"
-                  aria-labelledby="dropdownTable"
-                >
-                  <li>
-                    <a
-                      className="dropdown-item border-radius-md"
-                      href="javascript:;"
-                    >
-                      Action
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      className="dropdown-item border-radius-md"
-                      href="javascript:;"
-                    >
-                      Another action
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      className="dropdown-item border-radius-md"
-                      href="javascript:;"
-                    >
-                      Something else here
-                    </a>
-                  </li>
-                </ul>
+                  <img src="../assets/img/download.png" alt='copy' />
+                  <p style={{ marginTop: 10 }}>YOUR-CODE-{user?.referralCode}</p>
+                  <button className="btn btn-link" onClick={() => copyToClipboard(`${data?.referralCode}`)}>
+                    Copy
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
-        <div className="card-body px-0 pb-2">
-          <div className="table-responsive">
-            <table className="table align-items-center mb-0">
-              <thead>
-                <tr>
-                  <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                    Companies
-                  </th>
-                  <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                    Members
-                  </th>
-                  <th className="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                    Budget
-                  </th>
-                  <th className="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                    Completion
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    <div className="d-flex px-2 py-1">
-                      <div>
-                        <img
-                          src="../assets/img/small-logos/logo-xd.svg"
-                          className="avatar avatar-sm me-3"
-                          alt="xd"
-                        />
-                      </div>
-                      <div className="d-flex flex-column justify-content-center">
-                        <h6 className="mb-0 text-sm">Material XD Version</h6>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div className="avatar-group mt-2">
-                      <a
-                        href="javascript:;"
-                        className="avatar avatar-xs rounded-circle"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="bottom"
-                        title="Ryan Tompson"
-                      >
-                        <img src="../assets/img/team-1.jpg" alt="team1" />
-                      </a>
-                      <a
-                        href="javascript:;"
-                        className="avatar avatar-xs rounded-circle"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="bottom"
-                        title="Romina Hadid"
-                      >
-                        <img src="../assets/img/team-2.jpg" alt="team2" />
-                      </a>
-                      <a
-                        href="javascript:;"
-                        className="avatar avatar-xs rounded-circle"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="bottom"
-                        title="Alexander Smith"
-                      >
-                        <img src="../assets/img/team-3.jpg" alt="team3" />
-                      </a>
-                      <a
-                        href="javascript:;"
-                        className="avatar avatar-xs rounded-circle"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="bottom"
-                        title="Jessica Doe"
-                      >
-                        <img src="../assets/img/team-4.jpg" alt="team4" />
-                      </a>
-                    </div>
-                  </td>
-                  <td className="align-middle text-center text-sm">
-                    <span className="text-xs font-weight-bold"> $14,000 </span>
-                  </td>
-                  <td className="align-middle">
-                    <div className="progress-wrapper w-75 mx-auto">
-                      <div className="progress-info">
-                        <div className="progress-percentage">
-                          <span className="text-xs font-weight-bold">60%</span>
-                        </div>
-                      </div>
-                      <div className="progress">
-                        <div
-                          className="progress-bar bg-gradient-info w-60"
-                          role="progressbar"
-                          aria-valuenow={60}
-                          aria-valuemin={0}
-                          aria-valuemax={100}
-                        />
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
       </div>
     </div>
-    <div className="col-lg-4 col-md-6">
-      <div className="card h-100">
-        <div className="card-header pb-0">
-          <h6>Orders overview</h6>
-          <p className="text-sm">
-            <i className="fa fa-arrow-up text-success" aria-hidden="true" />
-            <span className="font-weight-bold">24%</span> this month
-          </p>
-        </div>
-        <div className="card-body p-3">
-          <div className="timeline timeline-one-side">
-            <div className="timeline-block mb-3">
-              <span className="timeline-step">
-                <i className="material-icons text-success text-gradient">
-                  notifications
-                </i>
-              </span>
-              <div className="timeline-content">
-                <h6 className="text-dark text-sm font-weight-bold mb-0">
-                  $2400, Design changes
-                </h6>
-                <p className="text-secondary font-weight-bold text-xs mt-1 mb-0">
-                  22 DEC 7:20 PM
-                </p>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-</div>
 
   )
 }

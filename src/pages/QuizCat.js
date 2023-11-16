@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Navbar from '../components/Navbar';
-import { Link } from 'react-router-dom';
 import { useGetQuizQuestionsQuery } from '../api/modules/quiz.Module';
 import MockTest from './MockTest';
 
@@ -34,12 +32,10 @@ function QuizCat() {
     refetch();
     setFetchedQuestions(quizQuestions)
   };
-  console.log(fetchedQuestions,"hi");
-console.log(fetchedQuestions.length > 0 )
-  const heading = 'Select Your Type';
+ 
 
   return (
-    !fetchedQuestions.length > 0 ? (
+   fetchedQuestions && !fetchedQuestions?.length > 0 ? (
       <main className="main-content mt-0">
         <section>
           <div className="page-header min-vh-90">
@@ -61,7 +57,7 @@ console.log(fetchedQuestions.length > 0 )
                       <p className="mb-0">
                       </p>
                     </div>
-                    <div className="card-body">
+                    <div style={{ padding: "0.5rem" }} className="card-body">
                       <div style={{ marginBottom: '20px' }}>
                         <label style={{ marginRight: '10px' }}>Select Category:</label>
                         <select
@@ -86,7 +82,7 @@ console.log(fetchedQuestions.length > 0 )
                           <option value="Biology">Biology</option>
                         </select>
                       </div>
-                      <button className="btn bg-gradient-success btn-block" onClick={handleStartQuiz}>
+                      <button style={{ marginLeft: "200px", marginTop: "50px" }} className="btn bg-gradient-success btn-block" onClick={handleStartQuiz}>
                         Start
                       </button>
                     </div>
@@ -97,7 +93,7 @@ console.log(fetchedQuestions.length > 0 )
           </div>
         </section>
       </main>
-    ) : <MockTest fetchedQuestions={fetchedQuestions} setFetchedQuestions={setFetchedQuestions}/>
+    ) : <MockTest fetchedQuestions={fetchedQuestions} setFetchedQuestions={setFetchedQuestions} />
   );
 }
 

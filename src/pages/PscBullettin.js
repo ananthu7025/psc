@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useGetFolderQuery } from '../api/modules/quiz.Module';
 import images from '../images';
+import toast from 'react-hot-toast';
 
 const PscBullettin = () => {
   const [selectedYear, setSelectedYear] = useState('');
@@ -22,35 +23,35 @@ const PscBullettin = () => {
   const handleMonthChange = (e) => {
     setSelectedMonth(e.target.value);
   };
-  const [driveItems,setDriveItems]=useState([])
-useEffect(() => {
-  const fetchData = async () => {
-    try {
-      const year=folderData?.find(item => item.year === selectedYear && item.month === selectedMonth)?.folderId || [];
-      const response = await fetch(`http://localhost:3030/api/files?folderId=${year}`);
-      const data = await response.json(); // Parse the JSON response
-      setDriveItems(data.files);  // Update this line
-      console.log(data.files, "dd");
-      setLoading(false);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      setLoading(false);
-    }
-  };
+  const [driveItems, setDriveItems] = useState([])
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const year = folderData?.find(item => item.year === selectedYear && item.month === selectedMonth)?.folderId || [];
+        const response = await fetch(`http://localhost:3030/api/files?folderId=${year}`);
+        const data = await response.json();
+        setDriveItems(data?.files);
+        console.log(data.files, "dd");
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        toast.error("Error fetching data")
+        setLoading(false);
+      }
+    };
 
-  fetchData();
-}, [selectedYear,selectedMonth]); 
-console.log(folderData.find(item => item.year === selectedYear))
+    fetchData();
+  }, [selectedYear, selectedMonth]);
   const openPDF = (webContentLink) => {
     window.open(webContentLink, '_blank');
-  };  const [loading, setLoading] = useState(true);
+  }; const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-        setTimeout(() => setLoading(false), 5000); 
+    setTimeout(() => setLoading(false), 3000);
   }, []);
 
   return (
-    <div style={{minHeight:"90vh"}} className="container-fluid py-4">
+    <div style={{ minHeight: "90vh" }} className="container-fluid py-4">
       <div className="row">
         <div className="col-12">
           <div className="row"></div>
@@ -69,7 +70,6 @@ console.log(folderData.find(item => item.year === selectedYear))
                         <h6 className="mb-0">Home - PSC Bulletin</h6>
                       </div>
                       <div className="col-6 text-end">
-                        <input className="input-search" type="text" placeholder="Search" />
                         <select className="input-search" value={selectedYear} onChange={handleYearChange}>
                           <option>2023</option>
                           <option>2024</option>
@@ -91,44 +91,41 @@ console.log(folderData.find(item => item.year === selectedYear))
                       </tr>
                     </thead>
                     <tbody>
-                    {loading ? (
-  <div style={{ display: "flex", justifyContent: "center", marginLeft: "280px", marginBottom: "100px",textAlign:"center" }}>
-    <span className="loader"></span>
-  </div>
-) : (
-  driveItems? (
-    driveItems.map((item, index) => (
-      <tr key={item.id}>
-      <td>
-        <div className="d-flex px-2 py-1">
-          <p className="text-xs font-weight-bold mb-0">{selectedYear}</p>
-        </div>
-      </td>
-      <td className="align-middle">
-        <a href="javascript:;" className="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
-          {item.name}
-        </a>
-      </td>
-      <td className="align-middle">
-        <a href="javascript:;" className="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user" onClick={() => openPDF(item.webContentLink)}>
-          Download
-        </a>
-      </td>
-    </tr>
-    ))
-  ) : (
-    <tr>
-      <td colSpan="3" className="text-center">
-        <img style={{ width: "200px", height: "230px" }} src={images.empty} alt="Empty" />
-        <p>No data found</p>
-      </td>
-    </tr>
-  )
-)}
-
-                     
+                      {loading ? (
+                        <div style={{ display: "flex", justifyContent: "center", marginLeft: "280px", marginBottom: "100px", textAlign: "center" }}>
+                          <span className="loader"></span>
+                        </div>
+                      ) : (
+                        driveItems && driveItems ? (
+                          driveItems?.map((item, index) => (
+                            <tr key={item?.id}>
+                              <td>
+                                <div className="d-flex px-2 py-1">
+                                  <p className="text-xs font-weight-bold mb-0">{selectedYear}</p>
+                                </div>
+                              </td>
+                              <td className="align-middle">
+                                <a href="javascript:;" className="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                                  {item?.name}
+                                </a>
+                              </td>
+                              <td className="align-middle">
+                                <a href="javascript:;" className="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user" onClick={() => openPDF(item?.webContentLink)}>
+                                  Download
+                                </a>
+                              </td>
+                            </tr>
+                          ))
+                        ) : (
+                          <tr>
+                            <td colSpan="3" className="text-center">
+                              <img style={{ width: "200px", height: "230px" }} src={images.empty} alt="Empty" />
+                              <p>No data found</p>
+                            </td>
+                          </tr>
+                        )
+                      )}
                     </tbody>
-                 
                   </table>
                 </div>
               </div>

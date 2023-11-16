@@ -5,20 +5,18 @@ import toast from 'react-hot-toast';
 
 
 const CreateProfile = () => {
-  const navigate = useNavigate();
 
+  const navigate = useNavigate();
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [district, setDistrict] = useState('');
   const [referralCode, setReferralCode] = useState('');
-
 
   const [createProfile, { isLoading, isError, isSuccess, error }] = useCreateProfileMutation();
 
   const handleProfileCreation = async (e) => {
     e.preventDefault();
     const userId = localStorage.getItem('UserId');
-
     try {
       const profileData = {
         name,
@@ -29,16 +27,16 @@ const CreateProfile = () => {
       };
       const result = await createProfile(profileData).unwrap();
       toast.success(result.message);
-      if(result.user.isPaid){
-        navigate('/home');
+      if (result?.user?.isPaid) {
+        navigate('/Profile');
       }
-      else{
+      else {
         navigate('/payment');
       }
-      console.log(result.user.isPaid)
-
     } catch (err) {
       console.error('Error creating profile:', err);
+      navigate('/');
+      toast.error("Error creating profile")
     }
   };
   return (

@@ -34,7 +34,14 @@ const quizApi = api.injectEndpoints({
           }
         },
       }),
+      updateIsPaidStatus: build.mutation({
+        query: (params) => ({
+          url: `user/update-isPaid`,
+          method: 'PUT',
+          body: params,
+        }),
+      }),
   }),
 });
 
-export const { useGetReferalQuery,useGetAllUserQuery } = quizApi;
+export const { useGetReferalQuery,useGetAllUserQuery,useUpdateIsPaidStatusMutation } = quizApi;

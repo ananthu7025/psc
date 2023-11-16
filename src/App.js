@@ -17,14 +17,17 @@ import Profile from './pages/Profile';
 import PscBullettin from './pages/PscBullettin';
 import SpecialTopic from './pages/SpecialTopic';
 import StudyPlan from './pages/StudyPlan';
-import Subscribition from './pages/Subscribition';
-import Syllabus from './pages/Syllabus';
+
 import LoginPage from './pages/LoginPage';
 import QuizCat from './pages/QuizCat';
 import CurrentAffairs from './pages/CurrentAffairs';
 import EXAMCALENDERSYLLABUS from './pages/EXAM CALENDER & SYLLABUS';
 import Referal from './pages/Admin/Referal';
 import UserList from './pages/Admin/UserList';
+import Payment from './pages/payment';
+import CreateQuestionComponent from './pages/Admin/CreateQuestion';
+import PublicWeb from './public';
+import Questions from './pages/Admin/Questions';
 function App() {
   return (
     <Provider store={Store}>
@@ -106,14 +109,6 @@ function App() {
           }
         />
         <Route
-          path="Subscribition"
-          element={
-            <Layout>
-              <Subscribition />
-            </Layout>
-          }
-        />
-        <Route
           path="CurrentAffairs"
           element={
             <Layout>
@@ -137,10 +132,39 @@ function App() {
             </Layout>
           }
         />
+         <Route
+          path="question-create"
+          element={
+            <Layout>
+              <CreateQuestionComponent/>
+            </Layout>
+          }
+        />
+          <Route
+         path="/question-create/:questionId?"
+          element={
+            <Layout>
+              <CreateQuestionComponent/>
+            </Layout>
+          }
+        />
+  
+        <Route
+          path="questions"
+          element={
+            <Layout>
+              <Questions/>
+            </Layout>
+          }
+        />
 
 
             </Route>
-            <Route element={<LoginPage />} path="/" />
+            <Route element={<LoginPage />} path="/login" />
+            <Route element={<Payment />} path="/payment" />
+            <Route element={<PublicWeb/>} path="/" />
+
+            
           </Routes>
         </Router>
       </div>
