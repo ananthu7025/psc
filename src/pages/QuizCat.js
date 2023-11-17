@@ -15,12 +15,6 @@ function QuizCat() {
   });
 
   useEffect(() => {
-    if (quizQuestions) {
-      setFetchedQuestions(quizQuestions);
-    }
-  }, []);
-
-  useEffect(() => {
     setIsLoading(fetchIsLoading);
   }, [fetchIsLoading]);
 
