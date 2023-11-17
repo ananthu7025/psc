@@ -5,7 +5,22 @@ import toast from 'react-hot-toast';
 
 
 const CreateProfile = () => {
-
+  const keralaDistricts = [
+    'Thiruvananthapuram',
+    'Kollam',
+    'Pathanamthitta',
+    'Alappuzha',
+    'Kottayam',
+    'Idukki',
+    'Ernakulam',
+    'Thrissur',
+    'Palakkad',
+    'Malappuram',
+    'Kozhikode',
+    'Wayanad',
+    'Kannur',
+    'Kasaragod',
+  ];
   const navigate = useNavigate();
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
@@ -74,10 +89,20 @@ const CreateProfile = () => {
                           type="number" className="form-control" value={phone} onChange={(e) => setPhone(e.target.value)} />
                       </div>
                       <div className="input-group input-group-outline mb-3">
-                        <input
-                          placeholder='Enter Your Distict'
-
-                          type="text" className="form-control" value={district} onChange={(e) => setDistrict(e.target.value)} />
+                      <select
+                          className="form-control"
+                          value={district}
+                          onChange={(e) => setDistrict(e.target.value)}
+                        >
+                          <option value="" disabled>
+                            Select District
+                          </option>
+                          {keralaDistricts.map((d, index) => (
+                            <option key={index} value={d}>
+                              {d}
+                            </option>
+                          ))}
+                        </select>
                       </div>
                       <div className="input-group input-group-outline mb-3">
                         <input

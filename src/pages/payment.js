@@ -1,7 +1,12 @@
 import './payment.css'
 import images from "../images";
+import { useGetUserDetailsQuery } from '../api/modules/login';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function Payment() {
+  const { data } = useGetUserDetailsQuery();
+  const navigate = useNavigate();
 
   const handleContactUs = () => {
     const recipientEmail = "pscgreen.learning@gmail.com";
@@ -10,7 +15,11 @@ function Payment() {
     const mailtoLink = `mailto:${recipientEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     window.location.href = mailtoLink;
   };
-  
+  useEffect(() => {
+    if (data?.isPaid) {
+      navigate('/Profile');
+    }
+  }, [data, navigate]);
   return (
     <div>
       <div className="main-payment">

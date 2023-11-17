@@ -181,7 +181,7 @@ const LoginPage = () => {
                           >
                             {isSignUpLoading ? 'Verifying OTP...' : 'Verify OTP'}
                           </button>
-                          <button className="button-as-text" style={{ marginTop: "20px", textDecoration: "none", color: "black" }} onClick={handleResend}>Resend Otp</button>
+                          <button className="button-as-text"style={{ textDecoration: "none", color: "blue", border: "none", background: "none", cursor: "pointer", fontSize: "15px",marginTop:"30px" }} onClick={handleResend}>Resend Otp</button>
 
                         </div>
                       </form>

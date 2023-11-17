@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useGetUserDetailsQuery } from '../api/modules/login';
 import images from '../images';
 
@@ -8,10 +8,16 @@ const Sidebar = () => {
   const currentPath = location.pathname;
   const [isRefech, setIsRefech] = useState(false)
   const { data, refetch } = useGetUserDetailsQuery();
+  const navigate = useNavigate();
+
   useEffect(() => {
     refetch()
   }, [isRefech])
-
+  const handleLogout = () => {
+    localStorage.removeItem('storage_Key');
+    localStorage.removeItem('UserId');
+    navigate("/")
+  };
   return (
     <aside
       className="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3 bg-gradient-dark"
@@ -87,13 +93,17 @@ const Sidebar = () => {
               </div>
               <span className="nav-link-text ms-1">Special Topic</span>
             </Link>
+            </li>
+          <li class="nav-item">
+
             <Link to="/CurrentAffairs" className={`nav-link ${currentPath === '/CurrentAffairs' ? 'active bg-gradient-success' : ''}`}>
               <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                 <i className="material-icons opacity-10">library_books</i>
               </div>
               <span className="nav-link-text ms-1">Current Affairs</span>
-            </Link>
+              </Link>
           </li>
+          
           <li class="nav-item">
 
             <Link to="/Profile" className={`nav-link ${currentPath === '/Profile' ? 'active bg-gradient-success' : ''}`}>
@@ -142,6 +152,15 @@ const Sidebar = () => {
               </li>
               : null
           }
+          <li class="nav-item">
+
+<button style={{marginLeft:"20px",background:"none",border:"none"}} onClick={handleLogout} className={`nav-link `}>
+  <div  className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+    <i className="material-icons opacity-10">library_books</i>
+  </div>
+  <span className="nav-link-text ms-1">Logout</span>
+  </button>
+</li>
         </ul>
       </div>
     </aside>
