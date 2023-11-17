@@ -69,7 +69,7 @@ const PreviousQuestionPaper = () => {
     const fetchData = async () => {
       try {
         const Select = folderStructure[selectedYear][selectedType][selectedGrade]
-        const response = await fetch(`${BASE_URL}/api/files?folderId=${Select}`);
+        const response = await fetch(`${BASE_URL}/files?folderId=${Select}`);
         const data = await response.json();
         setDriveItems(data?.files);
         setLoading(false);
@@ -88,16 +88,30 @@ const PreviousQuestionPaper = () => {
   };
   const handleYearChange = (e) => {
     setSelectedYear(e.target.value);
+    setCurrentPage(1)
+
   };
 
   const handleTypeChange = (e) => {
     setSelectedType(e.target.value);
+    setCurrentPage(1)
+
   };
 
   const handleGradeChange = (e) => {
     setSelectedGrade(e.target.value);
+    setCurrentPage(1)
   };
 
+  const ITEMS_PER_PAGE = 10;
+  const [currentPage, setCurrentPage] = useState(1);
+  const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
+  const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
+  const currentItems = driveItems?.slice(indexOfFirstItem, indexOfLastItem);
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
   return (
     <div style={{ minHeight: "90vh" }} className="container-fluid py-4">
       <div className="row">
@@ -122,6 +136,8 @@ const PreviousQuestionPaper = () => {
                         <select
                           className="input-search"
                           name="year"
+                          style={{marginLeft:"5px",marginRight:"5px"}}
+
                           value={selectedYear}
                           onChange={handleYearChange}
                         >
@@ -133,6 +149,9 @@ const PreviousQuestionPaper = () => {
                         </select>
                         <select
                           className="input-search"
+                          style={{marginLeft:"5px",marginRight:"5px"}}
+
+
                           name="type"
                           value={selectedType}
                           onChange={handleTypeChange}
@@ -142,6 +161,8 @@ const PreviousQuestionPaper = () => {
                         </select>
                         <select
                           className="input-search"
+                          style={{marginLeft:"5px",marginRight:"5px"}}
+
                           name="grade"
                           value={selectedGrade}
                           onChange={handleGradeChange}
@@ -167,9 +188,9 @@ const PreviousQuestionPaper = () => {
                           <span className="loader"></span>
                         </div>
                       ) : (
-                        driveItems ? (
+                        currentItems ? (
                           <React.Fragment>
-                            {driveItems && driveItems?.map((item, index) => (
+                            {currentItems && currentItems?.map((item, index) => (
                               <tr key={item?.id}>
                                 <td>
                                   <div className="d-flex px-2 py-1">
@@ -210,6 +231,42 @@ const PreviousQuestionPaper = () => {
                         )
                       )}
                     </tbody>
+                    <tfoot style={{ border: "none" }}>
+                      <tr style={{ border: "none" }}>
+                        <td colSpan="6" className="text-center" style={{ border: "none" }}>
+                          {/* Your provided pagination structure */}
+                          <div class="pagination">
+                            <button
+                              class="arrow btn-pageination"
+                              id="prevPage"
+                              disabled={currentPage === 1}
+                              onClick={() => handlePageChange(currentPage - 1)}
+                            >
+                              ← <span class="nav-text">PREV</span>
+                            </button>
+                            <div class="pages">
+                              {Array.from({ length: Math.ceil(driveItems?.length / ITEMS_PER_PAGE) }).map((_, index) => (
+                                <div
+                                  className={`page-number ${currentPage === index + 1 ? 'active' : ''}`}
+                                  style={{ backgroundColor: currentPage === index + 1 ? '#66BB6A' : 'transparent', color: currentPage === index + 1 ? 'white' : 'black', fontWeight: "700" }}
+                                  onClick={() => handlePageChange(index + 1)}
+                                >
+                                  {index + 1}
+                                </div>
+                              ))}
+                            </div>
+                            <button
+                              class="arrow btn-pageination"
+                              id="nextPage"
+                              disabled={currentPage === Math.ceil(driveItems?.length / ITEMS_PER_PAGE)}
+                              onClick={() => handlePageChange(currentPage + 1)}
+                            >
+                              <span class="nav-text">NEXT</span> →
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    </tfoot>
                   </table>
                 </div>
               </div>

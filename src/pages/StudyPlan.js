@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import images from '../images';
+import { BASE_URL } from '../api/modules/api';
 
 const StudyPlan = () => {
   const [studyData, setStudyData] = useState([]);
@@ -9,7 +10,7 @@ const StudyPlan = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:3030/api/drive/items?folderId=1jr8saZEViNSg2tVPA9h8jywU_4CgEfnG');
+        const response = await fetch(`${BASE_URL}/drive/items?folderId=1jr8saZEViNSg2tVPA9h8jywU_4CgEfnG`);
         const data = await response.json();
         setStudyData(data);
         setLoading(false);

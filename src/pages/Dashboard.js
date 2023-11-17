@@ -105,7 +105,7 @@ const Dashboard = () => {
                 ))
               ) : (
                 <div style={{ display: "flex", justifyContent: "center", flexDirection: "column" }}>
-                  <img style={{ width: "200px", height: "230px", marginLeft: "200px" }} src={images.empty} alt="Empty" />
+                  <img style={{ width: "160px", height: "160px", marginLeft: "200px" }} src={images.empty} alt="Empty" />
                   <p style={{ textAlign: "center" }}>No Referals to show .</p>
                 </div>
               )}

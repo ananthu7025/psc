@@ -4,12 +4,11 @@ import { BASE_URL } from '../api/modules/api';
 
 const CurrentAffairs = () => {
 
-
   const [driveItems, setDriveItems] = useState([])
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`${BASE_URL}/api/files?folderId=1wvt2MMZpr-v48LchHAB3my8WTYX5i-pu`);
+        const response = await fetch(`${BASE_URL}/files?folderId=1wvt2MMZpr-v48LchHAB3my8WTYX5i-pu`);
         const data = await response.json();
         setDriveItems(data.files);
         setLoading(false);
@@ -31,6 +30,15 @@ const CurrentAffairs = () => {
   useEffect(() => {
     setTimeout(() => setLoading(false), 2000);
   }, []);
+  const ITEMS_PER_PAGE = 10;
+  const [currentPage, setCurrentPage] = useState(1);
+  const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
+  const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
+  const currentItems = driveItems?.slice(indexOfFirstItem, indexOfLastItem);
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
   return (
     <div style={{ minHeight: "90vh" }} className="container-fluid py-4">
       <div className="row">
@@ -56,7 +64,7 @@ const CurrentAffairs = () => {
                   </div>
                   <table className="table align-items-center mb-0">
                     <thead>
-                      <tr style={{marginLeft:"50px",paddingLeft:"100px"}}>
+                      <tr style={{ marginLeft: "50px", paddingLeft: "100px" }}>
                         <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Title</th>
                         <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Download</th>
                       </tr>
@@ -67,8 +75,8 @@ const CurrentAffairs = () => {
                           <span className="loader"></span>
                         </div>
                       ) : (
-                        driveItems && driveItems ? (
-                          driveItems?.slice()?.reverse()?.map((item, index) => (
+                        currentItems && currentItems ? (
+                          currentItems?.slice()?.reverse()?.map((item, index) => (
                             <tr key={item?.id}>
 
                               <td className="align-middle">
@@ -105,6 +113,41 @@ const CurrentAffairs = () => {
                       )}
 
                     </tbody>
+                    <tfoot style={{ border: "none" }}>
+                      <tr style={{ border: "none" }}>
+                        <td colSpan="6" className="text-center" style={{ border: "none" }}>
+                          <div class="pagination">
+                            <button
+                              class="arrow btn-pageination"
+                              id="prevPage"
+                              disabled={currentPage === 1}
+                              onClick={() => handlePageChange(currentPage - 1)}
+                            >
+                              ← <span class="nav-text">PREV</span>
+                            </button>
+                            <div class="pages">
+                              {Array.from({ length: Math.ceil(driveItems?.length / ITEMS_PER_PAGE) }).map((_, index) => (
+                                <div
+                                  className={`page-number ${currentPage === index + 1 ? 'active' : ''}`}
+                                  style={{ backgroundColor: currentPage === index + 1 ? '#66BB6A' : 'transparent', color: currentPage === index + 1 ? 'white' : 'black', fontWeight: "700" }}
+                                  onClick={() => handlePageChange(index + 1)}
+                                >
+                                  {index + 1}
+                                </div>
+                              ))}
+                            </div>
+                            <button
+                              class="arrow btn-pageination"
+                              id="nextPage"
+                              disabled={currentPage === Math.ceil(driveItems?.length / ITEMS_PER_PAGE)}
+                              onClick={() => handlePageChange(currentPage + 1)}
+                            >
+                              <span class="nav-text">NEXT</span> →
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    </tfoot>
                   </table>
                 </div>
               </div>

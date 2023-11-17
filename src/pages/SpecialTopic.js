@@ -9,7 +9,7 @@ const SpecialTopic = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`${BASE_URL}/api/folder/files?folderId=174PLxquGWuddRVYF-TMlTqaUM-dr7ikV`);
+        const response = await fetch(`${BASE_URL}/folder/files?folderId=174PLxquGWuddRVYF-TMlTqaUM-dr7ikV`);
         const data = await response.json(); 
         setDriveItems(data?.subfolders);
         setLoading(false);
@@ -25,7 +25,7 @@ const SpecialTopic = () => {
   const openPDF = (webContentLink) => {
     window.open(webContentLink, '_blank');
   };
-
+  
   return (
     <div style={{ minHeight: "90vh" }} className="container-fluid py-4">
       <div className="row">
