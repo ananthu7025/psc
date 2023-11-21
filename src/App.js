@@ -22,6 +22,7 @@ import Payment from './pages/payment';
 import CreateQuestionComponent from './pages/Admin/CreateQuestion';
 import PublicWeb from './public';
 import Questions from './pages/Admin/Questions';
+import CreateCat from './pages/Admin/createCat';
 
 function App() {
 
@@ -143,6 +144,14 @@ function App() {
                 element={
                   <Layout>
                     <Questions />
+                  </Layout>
+                }
+              />
+                 <Route
+                path="cat"
+                element={
+                  <Layout>
+                    <CreateCat/>
                   </Layout>
                 }
               />

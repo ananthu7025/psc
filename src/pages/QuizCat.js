@@ -3,8 +3,8 @@ import { useGetQuizQuestionsQuery } from '../api/modules/quiz.Module';
 import MockTest from './MockTest';
 
 function QuizCat() {
-  const [selectedCategory, setSelectedCategory] = useState('Science');
-  const [selectedSubCategory, setSelectedSubCategory] = useState('Physics');
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedSubCategory, setSelectedSubCategory] = useState('');
   const [fetchedQuestions, setFetchedQuestions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -26,10 +26,18 @@ function QuizCat() {
     refetch();
     setFetchedQuestions(quizQuestions)
   };
- 
 
+  const categoryOptions = ['സിവിക്‌സ്', 'ഇന്ത്യൻ എക്‌ണോമിസ്', 'ഇന്ത്യൻ കോൺസ്റ്റിട്യൂഷൻ', 'സയൻസ്', 'സോഷ്യൽ സയൻസ്'];
+
+  const subCategoryOptions = {
+    'സിവിക്‌സ്': [''],
+    'ഇന്ത്യൻ എക്‌ണോമിസ്': [''],
+    'ഇന്ത്യൻ കോൺസ്റ്റിട്യൂഷൻ': [''],
+    'സയൻസ്': ['ഫിസിക്സ്', 'കെമിസ്റ്ററി', 'ബയോളജി'],
+    'സോഷ്യൽ സയൻസ്': ['ഹിസ്റ്ററി+++', 'കേരള ഹിസ്റ്ററി', 'ഇന്ത്യൻ ഹിസ്റ്ററ്ററി', 'വേൾഡ് ഹിസ്റ്ററി'],
+  };
   return (
-   fetchedQuestions && !fetchedQuestions?.length > 0 ? (
+    fetchedQuestions && !fetchedQuestions?.length > 0 ? (
       <main className="main-content mt-0">
         <section>
           <div className="page-header min-vh-90">
@@ -59,9 +67,11 @@ function QuizCat() {
                           value={selectedCategory}
                           onChange={(e) => setSelectedCategory(e.target.value)}
                         >
-                          <option value="Science">Science</option>
-                          <option value="History">History</option>
-                          <option value="Geography">Geography</option>
+                          {categoryOptions?.map((category) => (
+                            <option key={category} value={category}>
+                              {category}
+                            </option>
+                          ))}
                         </select>
                       </div>
                       <div style={{ marginBottom: '20px' }}>
@@ -71,9 +81,11 @@ function QuizCat() {
                           value={selectedSubCategory}
                           onChange={(e) => setSelectedSubCategory(e.target.value)}
                         >
-                          <option value="Physics">Physics</option>
-                          <option value="Chemistry">Chemistry</option>
-                          <option value="Biology">Biology</option>
+                          {subCategoryOptions[selectedCategory]?.map((subcategory) => (
+                            <option key={subcategory} value={subcategory}>
+                              {subcategory}
+                            </option>
+                          ))}
                         </select>
                       </div>
                       <button style={{ marginLeft: "200px", marginTop: "50px" }} className="btn bg-gradient-success btn-block" onClick={handleStartQuiz}>
