@@ -134,9 +134,7 @@ const CreateCat = () => {
       });
   
       if (response.ok) {
-        // Fetch categories again to update the list
         fetchCategories();
-        console.log(`Category with ID ${categoryId} deleted successfully`);
       } else {
         console.error(`Error deleting category with ID ${categoryId}: ${response.statusText}`);
       }
@@ -155,7 +153,6 @@ const CreateCat = () => {
       if (response.ok) {
         // Fetch subcategories again to update the list
         fetchSubcategories();
-        console.log(`Subcategory with ID ${subcategoryId} deleted successfully`);
       } else {
         console.error(`Error deleting subcategory with ID ${subcategoryId}: ${response.statusText}`);
       }
@@ -167,11 +164,9 @@ const CreateCat = () => {
   const [editingSubcategoryId, setEditingSubcategoryId] = useState(null);
   const [editedSubcategoryName, setEditedSubcategoryName] = useState('');
 
-  // ... (existing code)
 
   const handleEditSubcategory = async (subcategoryId) => {
     setEditingSubcategoryId(subcategoryId);
-    // Find the subcategory to edit
     const subcategoryToEdit = subcategories.find((subcategory) => subcategory._id === subcategoryId);
     setEditedSubcategoryName(subcategoryToEdit.name);
   };
@@ -187,12 +182,9 @@ const CreateCat = () => {
       });
 
       if (response.ok) {
-        // Reset editing state
         setEditingSubcategoryId(null);
         setEditedSubcategoryName('');
-        // Fetch subcategories again to update the list
         fetchSubcategories();
-        console.log(`Subcategory with ID ${subcategoryId} updated successfully`);
       } else {
         console.error(`Error editing subcategory with ID ${subcategoryId}: ${response.statusText}`);
       }
@@ -200,15 +192,11 @@ const CreateCat = () => {
       console.error(`Error editing subcategory with ID ${subcategoryId}:`, error);
     }
   };
-  // ... (existing code)
   const [editingCategoryId, setEditingCategoryId] = useState(null);
   const [editedCategoryName, setEditedCategoryName] = useState('');
 
-  // ... (existing code)
-
   const handleEditCategory = async (categoryId) => {
     setEditingCategoryId(categoryId);
-    // Find the category to edit
     const categoryToEdit = categories.find((category) => category._id === categoryId);
     setEditedCategoryName(categoryToEdit.name);
   };
@@ -224,12 +212,9 @@ const CreateCat = () => {
       });
 
       if (response.ok) {
-        // Reset editing state
         setEditingCategoryId(null);
         setEditedCategoryName('');
-        // Fetch categories again to update the list
         fetchCategories();
-        console.log(`Category with ID ${categoryId} updated successfully`);
       } else {
         console.error(`Error editing category with ID ${categoryId}: ${response.statusText}`);
       }

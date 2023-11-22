@@ -34,13 +34,8 @@ export const loginApi = api.injectEndpoints({
           const { data } = await queryFulfilled;
           localStorage.setItem('storage_Key', data.accessToken);
           localStorage.setItem('UserId', data.user.userId);
-
-        console.log(data.user)
-        console.log(data.user.userId)
-
           dispatch(loginSuccess(data));
           dispatch(updateUserData(data.user));
-
           return data;
         } catch (err) {
           console.log('ERROR', err);
@@ -85,9 +80,8 @@ export const loginApi = api.injectEndpoints({
       query: () => ({
         url: '/user/userDetails',
         method: 'GET',
-        // Pass the token in the headers
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('storage_Key')}`, // Get the token from local storage
+          Authorization: `Bearer ${localStorage.getItem('storage_Key')}`, 
         },
       }),
     }),

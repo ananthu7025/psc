@@ -36,7 +36,6 @@ const PscBullettin = () => {
         const response = await fetch(`${BASE_URL}/files?folderId=${year}`);
         const data = await response.json();
         setDriveItems(data?.files);
-        console.log(data.files, "dd");
         setLoading(false);
       } catch (error) {
         console.error('Error fetching data:', error);
