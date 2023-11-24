@@ -5,10 +5,108 @@ import toast from 'react-hot-toast';
 import { BASE_URL } from '../api/modules/api';
 
 const PscBullettin = () => {
+
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState()
+  const [token, setToken] = useState(null);
+  const ITEMS_PER_PAGE = 10;
+  const [currentPage, setCurrentPage] = useState(1);
+  const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
+  const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
+  const currentItems = Array.isArray(data) ? data.slice(indexOfFirstItem, indexOfLastItem) : [];
   const [selectedYear, setSelectedYear] = useState('');
   const [selectedMonth, setSelectedMonth] = useState('');
   const [folderData, setFolderData] = useState([]);
-  const { data: apiData, isLoading, isError, refetch } = useGetFolderQuery();
+  const { data: apiData } = useGetFolderQuery();
+
+  const openPDF = (webViewLink) => {
+    window.open(webViewLink, '_blank');
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  useEffect(() => {
+    const newCode = localStorage.getItem("code");
+    const newToken = localStorage.getItem("gtoken");
+
+    if (newCode) {
+      if (newToken) {
+        getFiles(JSON.parse(newToken));
+      } else {
+        getToken(newCode);
+      }
+    } else {
+      getAuthURL();
+    }
+  }, []);
+
+  const getAuthURL = async () => {
+    try {
+      const response = await fetch(`${BASE_URL}/getAuthURL`);
+      const authURL = await response.text();
+      window.location.href = authURL;
+    } catch (error) {
+      console.error('Error fetching authorization URL:', error);
+      toast.error("Please Signin with Google")
+    }
+  };
+
+  const getToken = async (code) => {
+    try {
+      const response = await fetch(`${BASE_URL}/getToken`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ code }),
+      });
+
+      const token = await response.json();
+      setToken(token);
+      localStorage.setItem("gtoken", JSON.stringify(token));
+    } catch (error) {
+      console.error('Error fetching token:', error);
+      localStorage.removeItem("gtoken");
+      localStorage.removeItem("code");
+      getAuthURL();
+    }
+  };
+
+  const getFiles = async (token) => {
+    try {
+      const year = folderData?.find(item => item.year === selectedYear && item.month === selectedMonth)?.folderId || '';
+      if (!year && year === '') {
+        console.warn('Selected year is missing. Skipping API call.');
+        setData([])
+        return;
+      }
+      const response = await fetch(`${BASE_URL}/readDrive/${year}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          access_token: token,
+        }),
+      });
+      if (response.status === 400 || response.status === 404) {
+        localStorage.removeItem("gtoken");
+        localStorage.removeItem("code");
+        getAuthURL();
+      }
+      const files = await response.json();
+      setLoading(false);
+      setData(files);
+    } catch (error) {
+      console.error('Error fetching files:', error);
+      localStorage.removeItem("gtoken");
+      localStorage.removeItem("code");
+      getAuthURL();
+    }
+  };
+
 
   useEffect(() => {
     if (apiData && apiData.length > 0) {
@@ -28,40 +126,16 @@ const PscBullettin = () => {
     setSelectedMonth(e.target.value);
     setCurrentPage(1)
   };
-  const [driveItems, setDriveItems] = useState([])
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const year = folderData?.find(item => item.year === selectedYear && item.month === selectedMonth)?.folderId || [];
-        const response = await fetch(`${BASE_URL}/files?folderId=${year}`);
-        const data = await response.json();
-        setDriveItems(data?.files);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        toast.error("Error fetching data")
-        setLoading(false);
-      }
-    };
-
-    fetchData();
+    const newToken = localStorage.getItem("gtoken");
+    getFiles(JSON.parse(newToken));
   }, [selectedYear, selectedMonth]);
-  const openPDF = (webContentLink) => {
-    window.open(webContentLink, '_blank');
-  }; const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setTimeout(() => setLoading(false), 3000);
   }, []);
-  const ITEMS_PER_PAGE = 10;
-  const [currentPage, setCurrentPage] = useState(1);
-  const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
-  const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
-  const currentItems = driveItems?.slice(indexOfFirstItem, indexOfLastItem);
 
-  const handlePageChange = (newPage) => {
-    setCurrentPage(newPage);
-  };
+
   return (
     <div style={{ minHeight: "90vh" }} className="container-fluid py-4">
       <div className="row">
@@ -108,7 +182,7 @@ const PscBullettin = () => {
                           <span className="loader"></span>
                         </div>
                       ) : (
-                        currentItems && currentItems ? (
+                        currentItems && currentItems?.length > 0 ? (
                           currentItems?.map((item, index) => (
                             <tr key={item?.id}>
                               <td>
@@ -151,7 +225,7 @@ const PscBullettin = () => {
                               ← <span class="nav-text">PREV</span>
                             </button>
                             <div class="pages">
-                              {Array.from({ length: Math.ceil(driveItems?.length / ITEMS_PER_PAGE) }).map((_, index) => (
+                              {Array.from({ length: Math.ceil(data?.length / ITEMS_PER_PAGE) }).map((_, index) => (
                                 <div
                                   className={`page-number ${currentPage === index + 1 ? 'active' : ''}`}
                                   style={{ backgroundColor: currentPage === index + 1 ? '#66BB6A' : 'transparent', color: currentPage === index + 1 ? 'white' : 'black', fontWeight: "700" }}
@@ -164,7 +238,7 @@ const PscBullettin = () => {
                             <button
                               class="arrow btn-pageination"
                               id="nextPage"
-                              disabled={currentPage === Math.ceil(driveItems?.length / ITEMS_PER_PAGE)}
+                              disabled={currentPage === Math.ceil(data?.length / ITEMS_PER_PAGE)}
                               onClick={() => handlePageChange(currentPage + 1)}
                             >
                               <span class="nav-text">NEXT</span> →

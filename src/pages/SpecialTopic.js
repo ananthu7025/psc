@@ -1,31 +1,95 @@
 import React, { useEffect, useState } from 'react';
 import images from '../images';
 import { BASE_URL } from '../api/modules/api';
+import toast from 'react-hot-toast';
 
 const SpecialTopic = () => {
-  const [driveItems, setDriveItems] = useState([]);
+  
   const [loading, setLoading] = useState(true);
+  const [data, setData] = useState()
+  const [token, setToken] = useState(null);
+
+  const openPDF = (webViewLink) => {
+    window.open(webViewLink, '_blank');
+
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(`${BASE_URL}/folder/files?folderId=174PLxquGWuddRVYF-TMlTqaUM-dr7ikV`);
-        const data = await response.json(); 
-        setDriveItems(data?.subfolders);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        setLoading(false);
+    const newCode = localStorage.getItem("code");
+    const newToken = localStorage.getItem("gtoken");
+
+    if (newCode) {
+      if (newToken) {
+        getFiles(JSON.parse(newToken));
+      } else {
+        getToken(newCode);
       }
-    };
+    } else {
+      getAuthURL();
+    }
+  }, [token]);
 
-    fetchData();
-  }, []);
-
-  const openPDF = (webContentLink) => {
-    window.open(webContentLink, '_blank');
+  const getAuthURL = async () => {
+    try {
+      const response = await fetch(`${BASE_URL}/getAuthURL`);
+      const authURL = await response.text();
+      window.location.href = authURL;
+    } catch (error) {
+      console.error('Error fetching authorization URL:', error);
+      toast.error("Please Signin with Google")
+    }
   };
-  
+
+  const getToken = async (code) => {
+    try {
+      const response = await fetch(`${BASE_URL}/getToken`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ code }),
+      });
+
+      const token = await response.json();
+      setToken(token);
+      localStorage.setItem("gtoken", JSON.stringify(token));
+    } catch (error) {
+      console.error('Error fetching token:', error);
+      localStorage.removeItem("gtoken");
+      localStorage.removeItem("code");
+      getAuthURL();
+    }
+  };
+
+  const getFiles = async (token) => {
+    try {
+      const response = await fetch(`${BASE_URL}/specialTopic/174PLxquGWuddRVYF-TMlTqaUM-dr7ikV`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          access_token: token,
+        }),
+      });
+
+      if (response.status === 400) {
+        localStorage.removeItem("gtoken");
+        localStorage.removeItem("code");
+        getAuthURL();
+      }
+      const files = await response.json();
+      console.log('Files:', files);
+      setLoading(false);
+      setData(files);
+    } catch (error) {
+      console.error('Error fetching files:', error);
+      localStorage.removeItem("gtoken");
+      localStorage.removeItem("code");
+      getAuthURL();
+    }
+  };
+
   return (
     <div style={{ minHeight: "90vh" }} className="container-fluid py-4">
       <div className="row">
@@ -53,8 +117,8 @@ const SpecialTopic = () => {
                     </div>
                   ) : (
                     <div style={{ marginLeft: "30px" }} className="accordion" id="accordion">
-                      {driveItems&& driveItems ? (
-                        driveItems.map((subfolder, index) => (
+                      {data && data?.subfolders?.length > 0 ? (
+                        data?.subfolders?.map((subfolder, index) => (
                           <div className="accordion-item" key={index}>
                             <div style={{ justifyContent: "space-between" }} className='d-flex'>
                               <h2 className="accordion-header" id={`heading-${index}`}>

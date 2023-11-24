@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 
 const QuestionTextWithToggle = ({ text, maxLength }) => {
+    
     const [expanded, setExpanded] = useState(false);
-
     const truncatedText = expanded ? text : text.slice(0, maxLength);
 
     return (
@@ -10,7 +10,7 @@ const QuestionTextWithToggle = ({ text, maxLength }) => {
             <p style={{ overflowWrap: 'break-word' }}>{truncatedText}</p>
             {text.length > maxLength && (
                 <span
-                    style={{ cursor: 'pointer', color: 'blue',fontSize:"10px" }}
+                    style={{ cursor: 'pointer', color: 'blue', fontSize: "10px" }}
                     onClick={() => setExpanded(!expanded)}
                 >
                     {expanded ? ' Show less' : ' Show more'}

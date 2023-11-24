@@ -4,8 +4,7 @@ export const api = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: 'http://localhost:3030/api',
     prepareHeaders: (headers) => {
-      // Replace AsyncStorage with your preferred method for handling async storage in a web app
-      const userToken = localStorage.getItem('storage_Key'); // Use localStorage or another storage method
+      const userToken = localStorage.getItem('storage_Key'); 
       if (userToken) {
         headers['Authorization'] = `Bearer ${userToken}`;
       }

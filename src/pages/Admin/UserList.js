@@ -5,10 +5,12 @@ import toast from 'react-hot-toast';
 
 const UserList = () => {
 
+    
     const [loading, setLoading] = useState(true);
     useEffect(() => {
         setTimeout(() => setLoading(false), 2000);
     }, []);
+
     const { data, refetch } = useGetAllUserQuery();
     const [updateIsPaidStatus] = useUpdateIsPaidStatusMutation();
     const handleIsPaidToggle = async (userId, currentIsPaidStatus) => {

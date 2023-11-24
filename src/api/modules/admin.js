@@ -10,7 +10,7 @@ const quizApi = api.injectEndpoints({
       async onQueryStarted(id, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
-          return data; 
+          return data;
         } catch (err) {
           console.log('ERROR fetching referrals', err);
           return err;
@@ -25,7 +25,7 @@ const quizApi = api.injectEndpoints({
       async onQueryStarted(id, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
-          return data; 
+          return data;
         } catch (err) {
           console.log('ERROR fetching all users', err);
           return err;

@@ -16,13 +16,13 @@ const CreateQuestionComponent = () => {
   const categoryOptions = ['സിവിക്‌സ്', 'ഇന്ത്യൻ എക്‌ണോമിസ്', 'ഇന്ത്യൻ കോൺസ്റ്റിട്യൂഷൻ', 'സയൻസ്', 'സോഷ്യൽ സയൻസ്'];
 
   const subCategoryOptions = {
-    'സിവിക്‌സ്': [''], 
-    'ഇന്ത്യൻ എക്‌ണോമിസ്': [''], 
-    'ഇന്ത്യൻ കോൺസ്റ്റിട്യൂഷൻ': [''], 
+    'സിവിക്‌സ്': [''],
+    'ഇന്ത്യൻ എക്‌ണോമിസ്': [''],
+    'ഇന്ത്യൻ കോൺസ്റ്റിട്യൂഷൻ': [''],
     'സയൻസ്': ['ഫിസിക്സ്', 'കെമിസ്റ്ററി', 'ബയോളജി'],
     'സോഷ്യൽ സയൻസ്': ['ഹിസ്റ്ററി+++', 'കേരള ഹിസ്റ്ററി', 'ഇന്ത്യൻ ഹിസ്റ്ററ്ററി', 'വേൾഡ് ഹിസ്റ്ററി'],
   };
-  
+
 
   const navigate = useNavigate();
 
@@ -106,40 +106,40 @@ const CreateQuestionComponent = () => {
     <div style={styles.container}>
       <form onSubmit={handleFormSubmit} style={styles.form}>
         <div className="row">
-        <div className="col-md-6">
-  <label style={styles.label}>
-    Category:
-    <select
-      name="category"
-      value={formData.category}
-      onChange={handleInputChange}
-      style={styles.input}
-    >
-      {categoryOptions.map((category, index) => (
-        <option key={index} value={category}>
-          {category}
-        </option>
-      ))}
-    </select>
-  </label>
-</div>
-<div className="col-md-6">
-  <label style={styles.label}>
-    Subcategory:
-    <select
-      name="subCategory"
-      value={formData.subCategory}
-      onChange={handleInputChange}
-      style={styles.input}
-    >
-      {subCategoryOptions[formData.category].map((subCategory, index) => (
-        <option key={index} value={subCategory}>
-          {subCategory}
-        </option>
-      ))}
-    </select>
-  </label>
-</div>
+          <div className="col-md-6">
+            <label style={styles.label}>
+              Category:
+              <select
+                name="category"
+                value={formData.category}
+                onChange={handleInputChange}
+                style={styles.input}
+              >
+                {categoryOptions.map((category, index) => (
+                  <option key={index} value={category}>
+                    {category}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+          <div className="col-md-6">
+            <label style={styles.label}>
+              Subcategory:
+              <select
+                name="subCategory"
+                value={formData.subCategory}
+                onChange={handleInputChange}
+                style={styles.input}
+              >
+                {subCategoryOptions[formData.category].map((subCategory, index) => (
+                  <option key={index} value={subCategory}>
+                    {subCategory}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
 
         </div>
 

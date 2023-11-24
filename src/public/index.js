@@ -1,9 +1,24 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import './public.css'
 import images from '../images'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 const PublicWeb = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window?.location?.search);
+    const code = urlParams.get('code');
+    const referrer = document.referrer;
+    const isOAuthScreen = referrer.includes('accounts.google.com/signin/oauth/v2/consentsummary');
+    if (code) {
+      localStorage.setItem("code", code);
+      if (isOAuthScreen) {
+      } else {
+        navigate(-1); 
+      }
+    }
+  }, []);
   return (
     <div className='body'>
       <header className="header" data-header="">

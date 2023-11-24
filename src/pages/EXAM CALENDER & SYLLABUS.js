@@ -10,36 +10,111 @@ const ExamCalander = () => {
   };
 
   const [selectedYear, setSelectedYear] = useState('2023');
-  const [driveItems, setDriveItems] = useState([])
+  const [data,setData]=useState()
+
+  const [token, setToken] = useState(null); 
   const ITEMS_PER_PAGE = 10;
   const [currentPage, setCurrentPage] = useState(1);
   const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
-  const currentItems = driveItems.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = Array.isArray(data) ? data.slice(indexOfFirstItem, indexOfLastItem) : [];
+  
+  
+  const openPDF = (webViewLink) => {
+    window.open(webViewLink, '_blank');
 
-  const handlePageChange = (newPage) => {
-    setCurrentPage(newPage);
   };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(`${BASE_URL}/files?folderId=${folderIds[selectedYear]}`);
-        const data = await response.json();
-        setDriveItems(data.files);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        toast.error("Error fetching data:")
-        setLoading(false);
-      }
-    };
+    const newCode = localStorage.getItem("code");
+    const newToken = localStorage.getItem("gtoken");
 
-    fetchData();
-  }, [selectedYear]);
-  const openPDF = (webContentLink) => {
-    window.open(webContentLink, '_blank');
+    if (newCode) {
+      if (newToken) {
+        getFiles(JSON.parse(newToken));
+      } else {
+        getToken(newCode);
+      }
+    } else {
+      getAuthURL();
+    }
+  }, [token]);
+
+  const getAuthURL = async () => {
+    try {
+      const response = await fetch(`${BASE_URL}/getAuthURL`);
+      const authURL = await response.text();
+      window.location.href = authURL;
+    } catch (error) {
+      console.error('Error fetching authorization URL:', error);
+      toast.error("Please Signin with Google")
+
+    }
   };
 
+  const getToken = async (code) => {
+    try {
+      const response = await fetch(`${BASE_URL}/getToken`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ code }),
+      });
+
+      const token = await response.json();
+      setToken(token);
+      localStorage.setItem("gtoken", JSON.stringify(token)); 
+    } catch (error) {
+      console.error('Error fetching token:', error);
+      localStorage.removeItem("gtoken");
+      localStorage.removeItem("code");
+      getAuthURL();
+    }
+  };
+useEffect(() => {
+  const newToken = localStorage.getItem("gtoken");
+  getFiles(JSON.parse(newToken));
+
+}, [selectedYear])
+
+  const getFiles = async (token) => {
+    if (!folderIds[selectedYear]&& folderIds[selectedYear] === '') {
+      console.warn('Selected year is missing. Skipping API call.');
+      toast.error("No data found for this year")
+      return;
+    }
+    try {
+      const response = await fetch(`${BASE_URL}/readDrive/${folderIds[selectedYear]}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          access_token: token,
+        }),
+      });
+  
+      if (response.status === 400) {
+        localStorage.removeItem("gtoken");
+        localStorage.removeItem("code");
+        getAuthURL();
+      }
+      const files = await response.json();
+      setLoading(false);
+      setData(files);
+    } catch (error) {
+      console.error('Error fetching files:', error);
+      localStorage.removeItem("gtoken");
+      localStorage.removeItem("code");
+      getAuthURL();
+    }
+  };
+  
   const handleYearChange = (e) => {
     setSelectedYear(e.target.value);
     setCurrentPage(1);
@@ -49,6 +124,7 @@ const ExamCalander = () => {
   useEffect(() => {
     setTimeout(() => setLoading(false), 5000);
   }, []);
+  
   return (
     <div style={{ minHeight: "90vh" }} className="container-fluid py-4">
       <div className="row">
@@ -100,7 +176,7 @@ const ExamCalander = () => {
                           <span className="loader"></span>
                         </div>
                       ) : (
-                        currentItems && currentItems ? (
+                        currentItems && currentItems?.length >0 ? (
                           currentItems?.slice()?.reverse()?.map((item, index) => (
                             <tr key={item.id}>
                               <td>
@@ -124,7 +200,7 @@ const ExamCalander = () => {
                                   className="text-secondary font-weight-bold text-xs"
                                   data-toggle="tooltip"
                                   data-original-title="Edit user"
-                                  onClick={() => openPDF(item?.webViewLink)}
+                                  onClick={() => openPDF(item?.webLink)}
                                 >
                                   Download
                                 </a>
@@ -156,7 +232,7 @@ const ExamCalander = () => {
                               ← <span class="nav-text">PREV</span>
                             </button>
                             <div class="pages">
-                              {Array.from({ length: Math.ceil(driveItems.length / ITEMS_PER_PAGE) }).map((_, index) => (
+                              {Array.from({ length: Math.ceil(data?.length / ITEMS_PER_PAGE) }).map((_, index) => (
                                 <div
                                   className={`page-number ${currentPage === index + 1 ? 'active' : ''}`}
                                   style={{ backgroundColor: currentPage === index + 1 ? '#66BB6A' : 'transparent', color: currentPage === index + 1 ? 'white' : 'black', fontWeight: "700" }}
@@ -169,7 +245,7 @@ const ExamCalander = () => {
                             <button
                               class="arrow btn-pageination"
                               id="nextPage"
-                              disabled={currentPage === Math.ceil(driveItems.length / ITEMS_PER_PAGE)}
+                              disabled={currentPage === Math.ceil(data?.length / ITEMS_PER_PAGE)}
                               onClick={() => handlePageChange(currentPage + 1)}
                             >
                               <span class="nav-text">NEXT</span> →

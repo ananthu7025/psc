@@ -81,11 +81,11 @@ export const loginApi = api.injectEndpoints({
         url: '/user/userDetails',
         method: 'GET',
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('storage_Key')}`, 
+          Authorization: `Bearer ${localStorage.getItem('storage_Key')}`,
         },
       }),
     }),
   }),
 });
 
-export const { useLoginMutation, useSignUpMutation, useResendOtpMutation,useGetUserDetailsQuery,useCreateProfileMutation } = loginApi;
+export const { useLoginMutation, useSignUpMutation, useResendOtpMutation, useGetUserDetailsQuery, useCreateProfileMutation } = loginApi;

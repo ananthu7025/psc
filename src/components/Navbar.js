@@ -22,17 +22,7 @@ const Navbar = () => {
         </ol>
         <h6 className="font-weight-bolder mb-0">{currentPath}</h6>
       </nav>
-      <div
-        className="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4"
-        id="navbar"
-      >
-        <div className="ms-md-auto pe-md-3 d-flex align-items-center">
-          <div className="input-group input-group-outline">
-            <label className="form-label">Type here...</label>
-            <input type="text" className="form-control" />
-          </div>
-        </div>
-      </div>
+    
     </div>
   </nav>
   

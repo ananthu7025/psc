@@ -1,44 +1,104 @@
 import React, { useEffect, useState } from 'react';
 import images from '../images';
 import { BASE_URL } from '../api/modules/api';
+import toast from 'react-hot-toast';
 
 const CurrentAffairs = () => {
-
-  const [driveItems, setDriveItems] = useState([])
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(`${BASE_URL}/files?folderId=1wvt2MMZpr-v48LchHAB3my8WTYX5i-pu`);
-        const data = await response.json();
-        setDriveItems(data.files);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  const openPDF = (webContentLink) => {
-    window.open(webContentLink, '_blank');
-  };
-
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    setTimeout(() => setLoading(false), 2000);
-  }, []);
+  const [data, setData] = useState()
+  const [token, setToken] = useState(null);
   const ITEMS_PER_PAGE = 10;
   const [currentPage, setCurrentPage] = useState(1);
   const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
-  const currentItems = driveItems?.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = Array.isArray(data) ? data.slice(indexOfFirstItem, indexOfLastItem) : [];
 
-  const handlePageChange = (newPage) => {
-    setCurrentPage(newPage);
+  const openPDF = (webViewLink) => {
+    window.open(webViewLink, '_blank');
+
   };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  useEffect(() => {
+    const newCode = localStorage.getItem("code");
+    const newToken = localStorage.getItem("gtoken");
+
+    if (newCode) {
+      if (newToken) {
+        getFiles(JSON.parse(newToken));
+      } else {
+        getToken(newCode);
+      }
+    } else {
+      getAuthURL();
+    }
+  }, [token]);
+
+  const getAuthURL = async () => {
+    try {
+      const response = await fetch(`${BASE_URL}/getAuthURL`);
+      const authURL = await response.text();
+      window.location.href = authURL;
+    } catch (error) {
+      console.error('Error fetching authorization URL:', error);
+      toast.error("Please Signin with Google")
+    }
+  };
+
+  const getToken = async (code) => {
+    try {
+      const response = await fetch(`${BASE_URL}/getToken`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ code }),
+      });
+
+      const token = await response.json();
+      setToken(token);
+      localStorage.setItem("gtoken", JSON.stringify(token));
+    } catch (error) {
+      console.error('Error fetching token:', error);
+      localStorage.removeItem("gtoken");
+      localStorage.removeItem("code");
+      getAuthURL();
+    }
+  };
+
+  const getFiles = async (token) => {
+    try {
+      const response = await fetch(`${BASE_URL}/readDrive/1wvt2MMZpr-v48LchHAB3my8WTYX5i-pu`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          access_token: token,
+        }),
+      });
+
+      if (response.status === 400) {
+        localStorage.removeItem("gtoken");
+        localStorage.removeItem("code");
+        getAuthURL();
+      }
+      const files = await response.json();
+      setLoading(false);
+      setData(files);
+    } catch (error) {
+      console.error('Error fetching files:', error);
+      localStorage.removeItem("gtoken");
+      localStorage.removeItem("code");
+      getAuthURL();
+    }
+  };
+
+
+
   return (
     <div style={{ minHeight: "90vh" }} className="container-fluid py-4">
       <div className="row">
@@ -95,7 +155,7 @@ const CurrentAffairs = () => {
                                   className="text-secondary font-weight-bold text-xs"
                                   data-toggle="tooltip"
                                   data-original-title="Edit user"
-                                  onClick={() => openPDF(item?.webViewLink)}
+                                  onClick={() => openPDF(item?.webLink)}
                                 >
                                   Download
                                 </a>
@@ -126,7 +186,7 @@ const CurrentAffairs = () => {
                               ← <span class="nav-text">PREV</span>
                             </button>
                             <div class="pages">
-                              {Array.from({ length: Math.ceil(driveItems?.length / ITEMS_PER_PAGE) }).map((_, index) => (
+                              {Array.from({ length: Math.ceil(currentItems?.length / ITEMS_PER_PAGE) }).map((_, index) => (
                                 <div
                                   className={`page-number ${currentPage === index + 1 ? 'active' : ''}`}
                                   style={{ backgroundColor: currentPage === index + 1 ? '#66BB6A' : 'transparent', color: currentPage === index + 1 ? 'white' : 'black', fontWeight: "700" }}
@@ -139,7 +199,7 @@ const CurrentAffairs = () => {
                             <button
                               class="arrow btn-pageination"
                               id="nextPage"
-                              disabled={currentPage === Math.ceil(driveItems?.length / ITEMS_PER_PAGE)}
+                              disabled={currentPage === Math.ceil(currentItems?.length / ITEMS_PER_PAGE)}
                               onClick={() => handlePageChange(currentPage + 1)}
                             >
                               <span class="nav-text">NEXT</span> →

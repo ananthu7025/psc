@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import images from '../../images';
-import { useDeleteQuestionMutation, useEditQuestionMutation, useGetAllQuestionsQuery } from '../../api/modules/quiz.Module';
+import { useGetAllQuestionsQuery } from '../../api/modules/quiz.Module';
 import QuestionTextWithToggle from '../../components/QuestionToggle';
 import { Link, useNavigate } from 'react-router-dom';
 import { BASE_URL } from '../../api/modules/api';
@@ -55,7 +55,7 @@ const Questions = () => {
             </div>
             <div className="card-body px-0 pb-2">
               <div className="table-responsive p-0">
-                <div className="card h-100">
+                <div className=" h-100">
                   <div className="card-header pb-0 p-3">
                     <div className="row">
                       <div className="col-6 d-flex align-items-center">
@@ -91,7 +91,17 @@ const Questions = () => {
                               <td style={{ marginLeft: "50px" }}>{item?.category}</td>
                               <td>{item?.subCategory}</td>
                               <QuestionTextWithToggle text={item?.questionText} maxLength={100} />
-                              <td>{item?.options.join(', ')}</td>
+                              <td>
+                                {item?.options.map((option, index) => (
+                                  <React.Fragment key={index}>
+                                    {index > 0 && <br />} 
+                                    <p style={{ overflowWrap: 'break-word' }}>
+                                      {option}
+                                    </p>
+                                  </React.Fragment>
+                                ))}
+                              </td>
+
                               <td>
                                 <button className="button-as-text" style={{ textDecoration: "none", color: "blue", border: "none", background: "none", cursor: "pointer", fontSize: "15px" }} onClick={() => handleEditQuestion(item?._id,)}>
                                   Edit

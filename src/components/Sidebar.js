@@ -13,10 +13,13 @@ const Sidebar = () => {
   useEffect(() => {
     refetch()
   }, [isRefech])
+
   const handleLogout = () => {
     localStorage.removeItem('storage_Key');
     localStorage.removeItem('UserId');
-    navigate("/")
+    localStorage.removeItem('code');
+    localStorage.removeItem('gtoken');
+    navigate("/login")
   };
   return (
     <aside
@@ -93,7 +96,7 @@ const Sidebar = () => {
               </div>
               <span className="nav-link-text ms-1">Special Topic</span>
             </Link>
-            </li>
+          </li>
           <li class="nav-item">
 
             <Link to="/CurrentAffairs" className={`nav-link ${currentPath === '/CurrentAffairs' ? 'active bg-gradient-success' : ''}`}>
@@ -101,9 +104,9 @@ const Sidebar = () => {
                 <i className="material-icons opacity-10">library_books</i>
               </div>
               <span className="nav-link-text ms-1">Current Affairs</span>
-              </Link>
+            </Link>
           </li>
-          
+
           <li class="nav-item">
 
             <Link to="/Profile" className={`nav-link ${currentPath === '/Profile' ? 'active bg-gradient-success' : ''}`}>
@@ -154,13 +157,13 @@ const Sidebar = () => {
           }
           <li class="nav-item">
 
-<button style={{marginLeft:"20px",background:"none",border:"none"}} onClick={handleLogout} className={`nav-link `}>
-  <div  className="text-white text-center me-2 d-flex align-items-center justify-content-center">
-    <i className="material-icons opacity-10">library_books</i>
-  </div>
-  <span className="nav-link-text ms-1">Logout</span>
-  </button>
-</li>
+            <button style={{ marginLeft: "20px", background: "none", border: "none" }} onClick={handleLogout} className={`nav-link `}>
+              <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                <i className="material-icons opacity-10">library_books</i>
+              </div>
+              <span className="nav-link-text ms-1">Logout</span>
+            </button>
+          </li>
         </ul>
       </div>
     </aside>
