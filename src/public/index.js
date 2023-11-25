@@ -14,8 +14,9 @@ const PublicWeb = () => {
     if (code) {
       localStorage.setItem("code", code);
       if (isOAuthScreen) {
+        navigate(-2)
       } else {
-        navigate(-1); 
+        navigate("/CurrentAffairs"); 
       }
     }
   }, []);
