@@ -10,7 +10,7 @@ const Profile = () => {
     refetch()
   }, [isRefech])
   const copyToClipboard = (text) => {
-    navigator.clipboard.writeText(text)
+        navigator.clipboard.writeText(text)
       .then(() => {
         toast.success("referal code copied");
       })

@@ -12,7 +12,7 @@ const Navbar = () => {
   >
     <div className="container-fluid py-1 px-3">
       <nav aria-label="breadcrumb">
-        <h6 className="font-weight-bolder mb-0">Home{currentPath}</h6>
+        <h6 className="font-weight-bolder mb-0 mt-2">PSCGREEN{currentPath}</h6>
       </nav>
     
     </div>

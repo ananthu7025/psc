@@ -36,7 +36,7 @@ const Sidebar = () => {
       <hr className="horizontal light mt-0 mb-2" />
       <div className="collapse navbar-collapse w-auto max-height-vh-100" id="sidenav-collapse-main">
         <ul className="navbar-nav">
-          <li class="nav-item">
+          <li className="nav-item">
             <Link to="/home" className={`nav-link ${currentPath === '/home' ? 'active bg-gradient-success' : ''}`}>
               <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                 <i className="material-icons opacity-10">dashboard</i>
@@ -44,7 +44,7 @@ const Sidebar = () => {
               <span className="nav-link-text ms-1">Home</span>
             </Link>
           </li>
-          <li class="nav-item">
+          <li className="nav-item">
             <Link to="/quiz-cat" className={`nav-link ${currentPath === '/quiz-cat' ? 'active bg-gradient-success' : ''}`}>
               <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                 <i className="material-icons opacity-10">assignment</i>
@@ -52,7 +52,7 @@ const Sidebar = () => {
               <span className="nav-link-text ms-1">Mock Test</span>
             </Link>
           </li>
-          <li class="nav-item">
+          <li className="nav-item">
 
             <Link to="/EXAMCALENDER&SYLLABUS" className={`nav-link ${currentPath === '/EXAMCALENDER&SYLLABUS' ? 'active bg-gradient-success' : ''}`}>
               <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -61,7 +61,7 @@ const Sidebar = () => {
               <span style={{ fontSize: "11px" }} className="nav-link-text ms-1">EXAM CALENDER & SYLLABUS</span>
             </Link>
           </li>
-          <li class="nav-item">
+          <li className="nav-item">
 
             <Link to="/PscBullettin" className={`nav-link ${currentPath === '/PscBullettin' ? 'active bg-gradient-success' : ''}`}>
               <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -70,7 +70,7 @@ const Sidebar = () => {
               <span className="nav-link-text ms-1">PSC Bulletin</span>
             </Link>
           </li>
-          <li class="nav-item">
+          <li className="nav-item">
 
             <Link to="/PreviousQuestionPaper" className={`nav-link ${currentPath === '/PreviousQuestionPaper' ? 'active bg-gradient-success' : ''}`}>
               <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -79,7 +79,7 @@ const Sidebar = () => {
               <span className="nav-link-text ms-1">Previous Question Paper</span>
             </Link>
           </li>
-          <li class="nav-item">
+          <li className="nav-item">
 
             <Link to="/StudyPlan" className={`nav-link ${currentPath === '/StudyPlan' ? 'active bg-gradient-success' : ''}`}>
               <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -88,7 +88,7 @@ const Sidebar = () => {
               <span className="nav-link-text ms-1">SCERT Study Plan</span>
             </Link>
           </li>
-          <li class="nav-item">
+          <li className="nav-item">
 
             <Link to="/SpecialTopic" className={`nav-link ${currentPath === '/SpecialTopic' ? 'active bg-gradient-success' : ''}`}>
               <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -97,7 +97,7 @@ const Sidebar = () => {
               <span className="nav-link-text ms-1">Special Topic</span>
             </Link>
           </li>
-          <li class="nav-item">
+          <li className="nav-item">
 
             <Link to="/CurrentAffairs" className={`nav-link ${currentPath === '/CurrentAffairs' ? 'active bg-gradient-success' : ''}`}>
               <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -107,7 +107,7 @@ const Sidebar = () => {
             </Link>
           </li>
 
-          <li class="nav-item">
+          <li className="nav-item">
 
             <Link to="/Profile" className={`nav-link ${currentPath === '/Profile' ? 'active bg-gradient-success' : ''}`}>
               <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -118,7 +118,7 @@ const Sidebar = () => {
           </li>
           {
             data?.isAdmin ?
-              <li class="nav-item">
+              <li className="nav-item">
 
                 <Link to="/Referal" className={`nav-link ${currentPath === '/Referal' ? 'active bg-gradient-success' : ''}`}>
                   <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -131,7 +131,7 @@ const Sidebar = () => {
           }
           {
             data?.isAdmin ?
-              <li class="nav-item">
+              <li className="nav-item">
 
                 <Link to="/User" className={`nav-link ${currentPath === '/User' ? 'active bg-gradient-success' : ''}`}>
                   <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -144,7 +144,7 @@ const Sidebar = () => {
           }
           {
             data?.isAdmin ?
-              <li class="nav-item">
+              <li className="nav-item">
 
                 <Link to="/questions" className={`nav-link ${currentPath === '/questions' ? 'active bg-gradient-success' : ''}`}>
                   <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -155,7 +155,7 @@ const Sidebar = () => {
               </li>
               : null
           }
-          <li class="nav-item">
+          <li className="nav-item">
 
             <button style={{ marginLeft: "20px", background: "none", border: "none" }} onClick={handleLogout} className={`nav-link `}>
               <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">

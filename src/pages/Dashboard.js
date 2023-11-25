@@ -26,7 +26,7 @@ const Dashboard = () => {
     (referral) => referral.referrerEmail === user?.email
   );
   const copyToClipboard = (text) => {
-    navigator.clipboard.writeText(text)
+        navigator.clipboard.writeText(text)
       .then(() => {
         toast.success("referal code copied");
 
@@ -118,7 +118,7 @@ const Dashboard = () => {
                 >
                   <img src="../assets/img/download.png" alt='copy' />
                   <p style={{ marginTop: 10 }}>YOUR-CODE-{user?.referralCode}</p>
-                  <button className="btn btn-link" onClick={() => copyToClipboard(`${data?.referralCode}`)}>
+                  <button className="btn btn-link" onClick={() => copyToClipboard(`${user?.referralCode}`)}>
                     Copy
                   </button>
                 </div>

@@ -74,17 +74,16 @@ const Referal = () => {
                                         <tfoot style={{ border: "none" }}>
                       <tr style={{ border: "none" }}>
                         <td colSpan="6" className="text-center" style={{ border: "none" }}>
-                          {/* Your provided pagination structure */}
-                          <div class="pagination">
+                          <div className="pagination">
                             <button
-                              class="arrow btn-pageination"
+                              className="arrow btn-pageination"
                               id="prevPage"
                               disabled={currentPage === 1}
                               onClick={() => handlePageChange(currentPage - 1)}
                             >
-                              ← <span class="nav-text">PREV</span>
+                              ← <span className="nav-text">PREV</span>
                             </button>
-                            <div class="pages">
+                            <div className="pages">
                               {Array.from({ length: Math.ceil(data?.length / ITEMS_PER_PAGE) }).map((_, index) => (
                                 <div
                                   className={`page-number ${currentPage === index + 1 ? 'active' : ''}`}
@@ -96,12 +95,12 @@ const Referal = () => {
                               ))}
                             </div>
                             <button
-                              class="arrow btn-pageination"
+                              className="arrow btn-pageination"
                               id="nextPage"
                               disabled={currentPage === Math.ceil(data?.length / ITEMS_PER_PAGE)}
                               onClick={() => handlePageChange(currentPage + 1)}
                             >
-                              <span class="nav-text">NEXT</span> →
+                              <span className="nav-text">NEXT</span> →
                             </button>
                           </div>
                         </td>

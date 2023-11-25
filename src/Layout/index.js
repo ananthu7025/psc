@@ -7,9 +7,9 @@ import Navbar from '../components/Navbar';
 
 const Layout = ({ children }) => {
   return (
-    <div class="g-sidenav-show  bg-gray-200">
+    <div className="g-sidenav-show  bg-gray-200">
       <Sidebar/>
-      <main   class="main-content position-relative  border-radius-lg ">
+      <main   className="main-content position-relative  border-radius-lg ">
       <Navbar/>
         {children}
       </main>

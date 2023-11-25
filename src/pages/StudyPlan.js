@@ -160,7 +160,7 @@ const StudyPlan = () => {
                                     {day?.files?.map((file, fileIndex) => (
                                       <div key={fileIndex}>
                                         <ul style={{ marginLeft: '90px' }}>
-                                          <li onClick={() => openPDF(file?.webContentLink)}>{file?.name}</li>
+                                          <li style={{cursor:"pointer"}} onClick={() => openPDF(file?.webContentLink)}>{file?.name}</li>
                                         </ul>
                                       </div>
                                     ))}
