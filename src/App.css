@@ -377,7 +377,7 @@ td{
   }
   
   a:hover {
-    color: var(--bs-link-hover-color);
+    /* color: var(--bs-link-hover-color); */
     text-decoration: none;
   }
   

@@ -126,7 +126,7 @@ const SpecialTopic = () => {
                                   {subfolder?.folderName}
                                 </button>
                               </h2>
-                              <img data-bs-toggle="collapse" data-bs-target={`#collapse-${index}`} aria-expanded="true" aria-controls={`collapse-${index}`} style={{ width: "40px", height: "25px", marginRight: "30px" }} src={images.down} />
+                              <img data-bs-toggle="collapse" data-bs-target={`#collapse-${index}`} aria-expanded="true" aria-controls={`collapse-${index}`} style={{ width: "40px", height: "25px", marginRight: "30px",cursor:"pointer" }} src={images.down} />
                             </div>
                             <div id={`collapse-${index}`} className="accordion-collapse collapse" aria-labelledby={`heading-${index}`} data-bs-parent="#accordion">
                               <div className="accordion-body">

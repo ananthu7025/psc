@@ -136,7 +136,7 @@ const StudyPlan = () => {
                               data-bs-target={`#collapse-${subjectIndex}`}
                               aria-expanded="true"
                               aria-controls={`collapse-${subjectIndex}`}
-                              style={{ width: '40px', height: '25px', marginRight: '30px' }}
+                              style={{ width: '40px', height: '25px', marginRight: '30px',cursor:"alias" }}
                               src={images?.down}
                               alt="down-arrow"
                             />

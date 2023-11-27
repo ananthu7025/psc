@@ -1,10 +1,15 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import './public.css'
 import images from '../images'
 import { Link, useNavigate } from 'react-router-dom'
 
 const PublicWeb = () => {
   const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleNavbar = () => {
+    setIsOpen(!isOpen);
+  };
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window?.location?.search);
@@ -27,7 +32,7 @@ const PublicWeb = () => {
           <a href="#" className="logo">
             <img src={images.logo} width="162" height="70" alt="EduWeb logo" />
           </a>
-          <nav className="navbar-public" data-navbar="">
+          <nav className={`navbar-public ${isOpen ? 'active' : ''}`}>
             <div className="wrapper">
               <a href="#" className="logo">
                 <img src={images.logo} width="162" height="70" alt="EduWeb logo" />
@@ -67,6 +72,7 @@ const PublicWeb = () => {
               className="header-action-btn"
               aria-label="open menu"
               data-nav-toggler=""
+              onClick={toggleNavbar}
             >
               <ion-icon name="menu-outline" aria-hidden="true" />
             </button>
@@ -97,7 +103,7 @@ const PublicWeb = () => {
                 <div className="img-holder two" style={{ '--width': 240, '--height': 370 }}>
                   <img src={images.banner2} width="240" height="370" alt="hero banner" className="img-cover" />
                 </div>
-                <img src={images.svg1} width="380" height="190" alt="wd" className="shape hero-shape-1" />
+                {/* <img src={images.svg1} width="380" height="190" alt="wd" className="shape hero-shape-1" /> */}
                 <img src={images.svg2} width="622" height="551" alt="wd" className="shape hero-shape-2" />
               </figure>
             </div>
@@ -122,7 +128,7 @@ const PublicWeb = () => {
                       <a href="#" className="card-title">Kerala PSC Previous Year Questions</a>
                     </h3>
                     <p className="card-text">
-                      Access a vast collection of previous year questions to enhance your preparation.
+                      Access a vast collection of previous questions to enhance your preparation.
                     </p>
                     <span className="card-badge">Practice and Prepare</span>
                   </div>
@@ -181,7 +187,7 @@ const PublicWeb = () => {
               <figure className="about-banner">
 
                 <div className="img-holder" style={{ '--width': 520, '--height': 370 }}>
-                  <img src={images.about} width="520" height="370" loading="lazy" alt="about banner"
+                  <img src={images.about} width="520" height="370"  alt="about banner"
                     className="img-cover" />
                 </div>
 
