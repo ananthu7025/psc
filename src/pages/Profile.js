@@ -10,7 +10,7 @@ const Profile = () => {
     refetch()
   }, [isRefech])
   const copyToClipboard = (text) => {
-        navigator.clipboard.writeText(text)
+    navigator.clipboard.writeText(text)
       .then(() => {
         toast.success("referal code copied");
       })
@@ -91,17 +91,17 @@ const Profile = () => {
                     PSC Green: Empowering users to excel in Kerala PSC exams with specialized support and guidance.
                   </p>
                   <li className="list-group-item border-0 ps-0 text-sm">
-  <strong className="text-dark">Join Our Whatsapp group:</strong> &nbsp;
-  <a href="https://chat.whatsapp.com/DeQUkcFJFp87EQgjdrsyqC" target="_blank" rel="noopener noreferrer">
-    <i className="fab fa-whatsapp"></i> WhatsApp Group Link
-  </a>
-</li>
-<li className="list-group-item border-0 ps-0 text-sm">
-  <strong className="text-dark">Join Our Telegram group:</strong> &nbsp;
-  <a href="https://t.me/+5keuTWxUn8xkNWRll" target="_blank" rel="noopener noreferrer">
-    <i className="fab fa-telegram"></i> Telegram Group Link
-  </a>
-</li>
+                    <strong className="text-dark">Join Our Whatsapp group:</strong> &nbsp;
+                    <a href="https://chat.whatsapp.com/DeQUkcFJFp87EQgjdrsyqC" target="_blank" rel="noopener noreferrer">
+                      <i className="fab fa-whatsapp"></i> WhatsApp Group Link
+                    </a>
+                  </li>
+                  <li className="list-group-item border-0 ps-0 text-sm">
+                    <strong className="text-dark">Join Our Telegram group:</strong> &nbsp;
+                    <a href="https://t.me/+MGOr_N97vJo2Zjg1" target="_blank" rel="noopener noreferrer">
+                      <i className="fab fa-telegram"></i> Telegram Group Link
+                    </a>
+                  </li>
                   <hr className="horizontal gray-light my-4" />
                   <ul style={{ textAlign: "left" }} className="list-group">
                     <li className="list-group-item border-0 ps-0 pt-0 text-sm">
@@ -119,7 +119,7 @@ const Profile = () => {
                     <li className="list-group-item border-0 ps-0 text-sm">
                       <strong className="text-dark">Location:</strong> &nbsp; {data?.district}
                     </li>
-                   
+
                   </ul>
                 </div>
               </div>
