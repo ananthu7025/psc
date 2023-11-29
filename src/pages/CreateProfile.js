@@ -50,7 +50,6 @@ const CreateProfile = () => {
       }
     } catch (err) {
       console.error('Error creating profile:', err);
-      navigate('/');
       toast.error("Error creating profile")
     }
   };
