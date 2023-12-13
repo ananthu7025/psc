@@ -29,15 +29,14 @@ function Payment() {
             <p>Subscribe to PSC GREEN and  get access to our resources. Take part in mock tests designed to enhance your learning experience and open up opportunities for a career in the Public Service Commission (PSC) jobs.</p>
             <div style={{ margin: "20px" }} className="subscription-options">
               <label>
-                Standard -Rs 250 (1 year)
+                Standard -Rs 250 (6 Months)
                 <p>Refer a friend for Standard plan and get Rs 100 cashback!</p>
               </label>
               <label>
-                Premium -Rs 450 (2 year)
+                Premium -Rs 450 (1 year)
                 <p>Refer a friend for Premium plan and get Rs 200 cashback!</p>
               </label>
               <label>
-                Our UPI
                 pscgreenlearning@ybl
               </label>
             </div>

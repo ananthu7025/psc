@@ -114,6 +114,7 @@ const PublicWeb = () => {
               <h2 className="h2 section-title">
                 Prepare with <span className="span">Comprehensive Resources</span> for Kerala PSC Exam.
               </h2>
+              <h2 style={{textAlign:"center"}}>Best SCERT STUDY PLAN</h2>
               <p className="section-text">
                 Access a wide range of resources tailored for your Kerala PSC exam preparation.
               </p>
@@ -219,10 +220,6 @@ const PublicWeb = () => {
                   <li className="about-item">
                     <ion-icon name="checkmark-done-outline" aria-hidden="true"></ion-icon>
                     <span className="span">Continuous Learning Support & Lifetime Access</span>
-                  </li>
-                  <li className="about-item">
-                    <ion-icon name="checkmark-done-outline" aria-hidden="true"></ion-icon>
-                    <span className="span">Expert Guidance & Skilled Instructors</span>
                   </li>
                 </ul>
                 <img src={images.about3} width="100" height="100" loading="lazy" alt="dd" className="shape about-shape-4" />
@@ -350,14 +347,12 @@ const PublicWeb = () => {
                     <p className="card-text">Satisfaction Rate</p>
                   </div>
                 </li>
-
                 <li>
-                  <div className="stats-card" style={{ '--color': '42, 94%, 55%' }}>
-                    <h3 className="card-title">354+</h3>
-                    <p className="card-text">Top Instructors</p>
+                  <div className="stats-card" style={{ '--color': '170, 75%, 41%' }}>
+                  <h3 className="card-title">100%</h3>
+                    <p className="card-text">SCERT STUDY PLANS</p>
                   </div>
                 </li>
-
               </ul>
 
             </div>
@@ -374,7 +369,7 @@ const PublicWeb = () => {
               </p>
               <div className="wrapper">
                 <span className="span">Call:</span>
-                <a href="tel:+011234567890" className="footer-link">+01 123 4567 890</a>
+                <a href="tel:+011234567890" className="footer-link">+91 9846243060</a>
               </div>
               <div className="wrapper">
                 <span className="span">Email:</span>
