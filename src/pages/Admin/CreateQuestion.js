@@ -115,11 +115,12 @@ const CreateQuestionComponent = () => {
                 onChange={handleInputChange}
                 style={styles.input}
               >
-                {categoryOptions.map((category, index) => (
-                  <option key={index} value={category}>
-                    {category}
-                  </option>
-                ))}
+              {categoryOptions && categoryOptions.map((category, index) => (
+  <option key={index} value={category}>
+    {category}
+  </option>
+))}
+
               </select>
             </label>
           </div>
@@ -132,11 +133,12 @@ const CreateQuestionComponent = () => {
                 onChange={handleInputChange}
                 style={styles.input}
               >
-                {subCategoryOptions[formData.category].map((subCategory, index) => (
-                  <option key={index} value={subCategory}>
-                    {subCategory}
-                  </option>
-                ))}
+                {subCategoryOptions[formData.category] && subCategoryOptions[formData.category].map((subCategory, index) => (
+  <option key={index} value={subCategory}>
+    {subCategory}
+  </option>
+))}
+
               </select>
             </label>
           </div>
