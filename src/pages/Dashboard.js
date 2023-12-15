@@ -71,14 +71,14 @@ const Dashboard = () => {
                 ))
               ) : (
                 <div style={{ display: "flex", justifyContent: "center", flexDirection: "column" }}>
-                  <img style={{ width: "200px", height: "230px", marginLeft: "200px" }} src={images.empty} alt="Empty" />
+                  <img className='Img-nodata'  src={images.empty} alt="Empty" />
                   <p style={{ textAlign: "center" }}>No scores available for this month.</p>
                 </div>
               )}
             </div>
           </div>
         </div>
-        <div className="col-lg-6 col-md-6">
+        <div className="col-lg-6 col-md-6 addmt">
           <div className="card h-100" style={{ maxHeight: "500px", overflow: "auto" }}>
             <div className="card-header pb-0">
               <h6>Your Referal</h6>
@@ -105,7 +105,7 @@ const Dashboard = () => {
                 ))
               ) : (
                 <div style={{ display: "flex", justifyContent: "center", flexDirection: "column" }}>
-                  <img style={{ width: "160px", height: "160px", marginLeft: "200px" }} src={images.empty} alt="Empty" />
+                  <img className='Img-nodata'  src={images.empty} alt="Empty" />
                   <p style={{ textAlign: "center" }}>No Referals to show .</p>
                 </div>
               )}

@@ -1,33 +1,68 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useLocation } from 'react-router-dom';
 import images from '../images';
 import { useGetUserDetailsQuery } from '../api/modules/login';
 
-const Navbar = () => {
+const Navbar = ({ toggleSidebar }) => {
   const location = useLocation();
   const currentPath = location.pathname;
   const { data: user } = useGetUserDetailsQuery();
+  useEffect(() => {
+    const iconNavbarSidenav = document.getElementById('iconNavbarSidenav');
 
+    if (iconNavbarSidenav) {
+      iconNavbarSidenav.addEventListener('click', toggleSidebar);
+    }
+
+    return () => {
+      // Cleanup: remove event listener when the component is unmounted
+      if (iconNavbarSidenav) {
+        iconNavbarSidenav.removeEventListener('click', toggleSidebar);
+      }
+    };
+  }, [toggleSidebar]);
   return (
     <nav
-    className="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl"
-    id="navbarBlur"
-    navbar-scroll="true"
-  >
-    <div className="container-fluid py-1 px-3">
-      <nav aria-label="breadcrumb">
-        <h6 className="font-weight-bolder mb-0 mt-2">PSCGREEN{currentPath}</h6>
-      </nav>
+  className="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl"
+  id="navbarBlur"
+  data-scroll="true"
+>
+  <div className="container-fluid py-1 px-3">
+    <nav aria-label="breadcrumb">
+    <h6 className="font-weight-bolder mb-0 mt-2">PSCGREEN{currentPath}</h6>
+ 
+    </nav>
     <div  className='d-flex'>
-      <img 
-       alt="profile_image"
-       className="w-100 border-radius-lg shadow-sm"
-       style={{width:"10px",height:"40px",borderRadius:"50%"}}
-      src={images.avatar}/>
-      <h6 style={{marginLeft:"10px",marginTop:"10px"}}>{user?.name}</h6>
+    
     </div>    
+    <div
+      className="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4"
+      id="navbar"
+    >
+      
+      <ul className="navbar-nav  justify-content-end">
+
+      <h6 style={{marginLeft:"10px",marginTop:"10px"}}>{user?.name}</h6>
+        <li className="nav-item d-xl-none ps-3 d-flex align-items-center">
+          <a
+            href="javascript:;"
+            className="nav-link text-body p-0"
+            id="iconNavbarSidenav"
+            
+          >
+            <div className="sidenav-toggler-inner">
+              <i className="sidenav-toggler-line" />
+              <i className="sidenav-toggler-line" />
+              <i className="sidenav-toggler-line" />
+            </div>
+          </a>
+        </li>
+       
+      </ul>
     </div>
-  </nav>
+  </div>
+</nav>
+
   
   )
 }

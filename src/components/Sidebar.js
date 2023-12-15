@@ -27,7 +27,7 @@ const Sidebar = () => {
       id="sidenav-main"
     >
       <div className="sidenav-header">
-        <i className="fas fa-times p-3 cursor-pointer text-white opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
+        <i style={{color:"white"}} className="fas fa-times p-3 cursor-pointer text-white opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
         <a className="navbar-brand m-0" target="_blank">
           <img style={{ width: "70px", borderRadius: "24%", marginRight: "10px" }} src={images.logo} className="navbar-brand-img h-100" alt="main_logo" />
           <span className="ms-1 font-weight-bold text-white">PSC Green</span>

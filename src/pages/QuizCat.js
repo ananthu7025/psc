@@ -57,12 +57,12 @@ function QuizCat() {
                 <div style={{ background: 'white' }} className="col-xl-5 col-lg-6 col-md-7 d-flex flex-column ms-auto me-auto ms-lg-auto me-lg-5">
                   <div className="card card-plain">
                     <div className="card-header">
-                      <h4 className="font-weight-bolder">Mock Test</h4>
+                      <h4 className="font-weight-bolder quiz-hd">Mock Test</h4>
                       <p className="mb-0">
                       </p>
                     </div>
                     <div style={{ padding: "0.5rem" }} className="card-body">
-                      <div style={{ marginBottom: '20px' }}>
+                      <div className='quizcat-select' style={{ marginBottom: '20px' }}>
                         <label style={{ marginRight: '10px' }}>Select Category:</label>
                         <select
                           style={{ padding: '5px', fontSize: '16px' }}
@@ -76,8 +76,8 @@ function QuizCat() {
                           ))}
                         </select>
                       </div>
-                      <div style={{ marginBottom: '20px' }}>
-                        <label style={{ marginRight: '10px' }}>Select Subcategory:</label>
+                      <div className='quizcat-select'  style={{ marginBottom: '20px' }}>
+                        <label className='quiz-hd' style={{ marginRight: '10px' }}>Select Subcategory:</label>
                         {subCategoryOptions[selectedCategory]?.length > 0 && subCategoryOptions[selectedCategory]?.[0] !== '' ? (
                           <select
                             style={{ padding: '5px', fontSize: '16px' }}
@@ -94,7 +94,7 @@ function QuizCat() {
                           <span>No subcategories available</span>
                         )}
                       </div>
-                      <button style={{ marginLeft: "200px", marginTop: "50px" }} className="btn bg-gradient-success btn-block" onClick={handleStartQuiz}>
+                      <button   className="btn bg-gradient-success btn-block quiz-catbtn" onClick={handleStartQuiz}>
                         Start
                       </button>
                     </div>
