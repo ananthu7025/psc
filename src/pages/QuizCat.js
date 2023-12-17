@@ -3,8 +3,8 @@ import { useGetQuizQuestionsQuery } from '../api/modules/quiz.Module';
 import MockTest from './MockTest';
 
 function QuizCat() {
-  const [selectedCategory, setSelectedCategory] = useState('സിവിക്‌സ്');
-  const [selectedSubCategory, setSelectedSubCategory] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('സയൻസ്');
+  const [selectedSubCategory, setSelectedSubCategory] = useState('ഫിസിക്സ്');
   const [fetchedQuestions, setFetchedQuestions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);

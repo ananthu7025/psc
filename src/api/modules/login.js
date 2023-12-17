@@ -34,6 +34,7 @@ export const loginApi = api.injectEndpoints({
           const { data } = await queryFulfilled;
           localStorage.setItem('storage_Key', data.accessToken);
           localStorage.setItem('UserId', data.user.userId);
+          localStorage.setItem('Paid', data.user.isPaid);
           dispatch(loginSuccess(data));
           dispatch(updateUserData(data.user));
           return data;
@@ -52,6 +53,7 @@ export const loginApi = api.injectEndpoints({
       async onQueryStarted(id, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
+          localStorage.setItem('Paid', data.user.isPaid);
           return data;
         } catch (err) {
           console.log('ERROR', err);
@@ -84,6 +86,17 @@ export const loginApi = api.injectEndpoints({
           Authorization: `Bearer ${localStorage.getItem('storage_Key')}`,
         },
       }),
+      async onQueryStarted(id, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          console.log(data)
+          localStorage.setItem('Paid', data.isPaid);
+          return data;
+        } catch (err) {
+          console.log('ERROR', err);
+          return err;
+        }
+      },
     }),
   }),
 });
