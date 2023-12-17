@@ -52,11 +52,11 @@ const LoginPage = () => {
     try {
       const otpValue = otp.join('');
       const res = await signUp({ email, otp: otpValue });
-      if (res.data) {
+      if (res?.data) {
         toast.success(res.data.message);
       }
-      if (res.data.user.isCreated) {
-        if (res.data.user.isPaid) {
+      if (res?.data?.user?.isCreated) {
+        if (res?.data?.user?.isPaid) {
           navigate('/Profile');
         } else {
           navigate('/payment');
