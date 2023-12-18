@@ -23,6 +23,7 @@ import CreateQuestionComponent from './pages/Admin/CreateQuestion';
 import PublicWeb from './public';
 import Questions from './pages/Admin/Questions';
 import CreateCat from './pages/Admin/createCat';
+import PrivacyPolicy from './public/privacy';
 
 function App() {
 
@@ -159,6 +160,7 @@ function App() {
             <Route element={<LoginPage />} path="/login" />
             <Route element={<Payment />} path="/payment" />
             <Route element={<PublicWeb />} path="/" />
+            <Route element={<PrivacyPolicy/>} path="/privacy" />
             <Route
               path="createprofile"
               element={

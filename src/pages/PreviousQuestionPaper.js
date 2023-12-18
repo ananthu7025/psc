@@ -146,7 +146,7 @@ const PreviousQuestionPaper = () => {
         }),
       });
   
-      if (response.status === 400 || response.status ===404) {
+      if (response.status === 500 || response.status ===404 ||response.status===400) {
         localStorage.removeItem("gtoken");
         localStorage.removeItem("code");
         getAuthURL();

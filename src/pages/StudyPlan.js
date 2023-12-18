@@ -73,7 +73,7 @@ const StudyPlan = () => {
         }),
       });
 
-      if (response.status === 400) {
+      if (response.status === 500) {
         localStorage.removeItem("gtoken");
         localStorage.removeItem("code");
         getAuthURL();

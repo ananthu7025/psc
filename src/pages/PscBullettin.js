@@ -91,7 +91,7 @@ const PscBullettin = () => {
           access_token: token,
         }),
       });
-      if (response.status === 400 || response.status === 404) {
+      if (response.status === 400 || response.status === 404 || response.status===500) {
         localStorage.removeItem("gtoken");
         localStorage.removeItem("code");
         getAuthURL();
