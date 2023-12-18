@@ -68,14 +68,14 @@ const PublicWeb = () => {
               <span className="span">Login</span>
               <ion-icon name="arrow-forward-outline" aria-hidden="true" />
             </a></Link>
-            <button
+            {/* <button
               className="header-action-btn"
               aria-label="open menu"
               data-nav-toggler=""
               onClick={toggleNavbar}
             >
               <ion-icon name="menu-outline" aria-hidden="true" />
-            </button>
+            </button> */}
           </div>
           <div className="overlay" data-nav-toggler="" data-overlay="" />
         </div>

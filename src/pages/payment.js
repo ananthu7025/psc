@@ -40,6 +40,9 @@ function Payment() {
                 pscgreenlearning@ybl
               </label>
             </div>
+            <p style={{ marginTop: '10px' }}>
+                If payment is done, please send a message to +91 9846243060, and your account will be active in a day.
+              </p>
             <button onClick={handleContactUs}>Contact Us</button>
           </div>
         </div>
