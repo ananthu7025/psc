@@ -1,163 +1,142 @@
-import React, { useEffect, useState } from 'react';
-import images from '../images';
+import React, { useState, useEffect } from 'react';
 import { BASE_URL } from '../api/modules/api';
+import Select from 'react-select';
 import toast from 'react-hot-toast';
+import { useGetUserDetailsQuery } from '../api/modules/login';
 
-const ExamCalander = () => {
-  const folderIds = {
-    '2024': '1DL9tKYNZO6Qm6xCOrSVXV4SZezmJ5X-y',
-    '2023': '191f84yQUXPmd3b9U2YjX1MI8RhGWAIfb',
-  };
-
-  const [selectedYear, setSelectedYear] = useState('2023');
-  const [data,setData]=useState()
-
-  const [token, setToken] = useState(null); 
-  const ITEMS_PER_PAGE = 10;
-  const [currentPage, setCurrentPage] = useState(1);
-  const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
-  const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
-  const currentItems = Array.isArray(data) ? data.slice(indexOfFirstItem, indexOfLastItem) : [];
-  
-  
-  const openPDF = (webViewLink) => {
-    window.open(webViewLink, '_blank');
-
-  };
-
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
-
+const YourComponent = () => {
+  const [selectedFolder, setSelectedFolder] = useState('');
+  const [subfoldersForFiles, setSubfoldersForFiles] = useState([]);
+  const [data, setData] = useState([]);
+  const [loadingSubfolders, setLoadingSubfolders] = useState(true);
+  const [loadingFiles, setLoadingFiles] = useState(false);
+  const [file, setFile] = useState(null);
+  const [uploading, setUploading] = useState(false);
+  const { data: user, refetch } = useGetUserDetailsQuery();
   useEffect(() => {
-    const newCode = localStorage.getItem("code");
-    const newToken = localStorage.getItem("gtoken");
-
-    if (newCode) {
-      if (newToken) {
-        getFiles(JSON.parse(newToken));
-      } else {
-        getToken(newCode);
-      }
-    } else {
-      getAuthURL();
+    // Set the initial selected folder when the component mounts
+    if (!selectedFolder && subfoldersForFiles.length > 0) {
+      setSelectedFolder(subfoldersForFiles[0]);
     }
-  }, [token]);
-
-  const getAuthURL = async () => {
+  }, [selectedFolder, subfoldersForFiles]);
+  const fetchFiles = async () => {
     try {
-      const response = await fetch(`${BASE_URL}/getAuthURL`);
-      const authURL = await response.text();
-      window.location.href = authURL;
-    } catch (error) {
-      console.error('Error fetching authorization URL:', error);
-      toast.error("Please Signin with Google")
-
-    }
-  };
-
-  const getToken = async (code) => {
-    try {
-      const response = await fetch(`${BASE_URL}/getToken`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ code }),
-      });
-
-      const token = await response.json();
-      setToken(token);
-      localStorage.setItem("gtoken", JSON.stringify(token)); 
-    } catch (error) {
-      console.error('Error fetching token:', error);
-      localStorage.removeItem("gtoken");
-      localStorage.removeItem("code");
-      getAuthURL();
-    }
-  };
-useEffect(() => {
-  const newToken = localStorage.getItem("gtoken");
-  getFiles(JSON.parse(newToken));
-
-}, [selectedYear])
-
-  const getFiles = async (token) => {
-    if (!folderIds[selectedYear]&& folderIds[selectedYear] === '') {
-      console.warn('Selected year is missing. Skipping API call.');
-      toast.error("No data found for this year")
-      return;
-    }
-    try {
-      const response = await fetch(`${BASE_URL}/readDrive/${folderIds[selectedYear]}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          access_token: token,
-        }),
-      });
-  
-      if (response.status === 500) {
-        localStorage.removeItem("gtoken");
-        localStorage.removeItem("code");
-        getAuthURL();
-      }
-      const files = await response.json();
-      setLoading(false);
-      setData(files);
+      setLoadingFiles(true);
+      const response = await fetch(`${BASE_URL}/exam_calnder/files/${selectedFolder}`);
+      const result = await response.json();
+      setData(result.pdfFiles);
     } catch (error) {
       console.error('Error fetching files:', error);
-      localStorage.removeItem("gtoken");
-      localStorage.removeItem("code");
-      getAuthURL();
+    } finally {
+      setLoadingFiles(false);
     }
   };
-  
-  const handleYearChange = (e) => {
-    setSelectedYear(e.target.value);
-    setCurrentPage(1);
-  };
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setTimeout(() => setLoading(false), 5000);
+    const fetchFolders = async () => {
+      try {
+        setLoadingSubfolders(true);
+        const response = await fetch(`${BASE_URL}/exam_calnder`);
+        const result = await response.json();
+        setSubfoldersForFiles(result.folders);
+      } catch (error) {
+        console.error('Error fetching folders:', error);
+      } finally {
+        setLoadingSubfolders(false);
+      }
+    };
+
+    fetchFolders();
   }, []);
-  
+
+  useEffect(() => {
+    if (selectedFolder) {
+      fetchFiles();
+    } else {
+      setData([]);
+    }
+  }, [selectedFolder]);
+
+  const [selectedSubfolder, setSelectedSubfolder] = useState(null);
+  const [newSubfolder, setNewSubfolder] = useState('');
+  const [subfoldersForUpload, setSubfoldersForUpload] = useState([]);
+
+  const fetchSubfolders = async () => {
+    try {
+      const response = await fetch(`${BASE_URL}/exam_calnder/subfolders`);
+      const result = await response.json();
+      setSubfoldersForUpload(result.subfolders);
+    } catch (error) {
+      console.error('Error fetching subfolders:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchSubfolders();
+  }, []);
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+  };
+
+  const handleUpload = () => {
+    if (!file) {
+      alert('Please select a file to upload.');
+      return;
+    }
+    const subfolder = selectedSubfolder ? selectedSubfolder.value : newSubfolder;
+    const uploadUrl = `${BASE_URL}/exam/upload?subfolder=${encodeURIComponent(subfolder)}`;
+    const formData = new FormData();
+    formData.append('pdf', file);
+    fetch(uploadUrl, {
+      method: 'POST',
+      body: formData,
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        toast.success('File uploaded successfully'); // Display success toast
+        fetchFiles();
+        window.location.reload()
+
+      })
+      .catch(error => console.error('Error uploading PDF:', error));
+  };
+
+
+  const optionsArrayForFiles = Object.values(subfoldersForFiles);
+  const optionsArrayForUpload = Object.values(subfoldersForUpload);
+  console.log(user)
   return (
     <div style={{ minHeight: "90vh" }} className="container-fluid py-4">
       <div className="row">
         <div className="col-12">
-          <div className="row"></div>
-
           <div className="card my-4">
-            <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-              <div className="bg-gradient-success shadow-primary border-radius-lg pt-4 pb-3">
-                <h6 className="text-white text-capitalize ps-3">EXAM CALENDER & SYLLABUS</h6>
-              </div>
-            </div>
             <div className="card-body px-0 pb-2">
               <div className="table-responsive p-0">
                 <div className="card h-100">
                   <div className="card-header pb-0 p-3">
                     <div className="row">
                       <div className="col-6 d-flex align-items-center">
-                        <h6 className="mb-0">Home - EXAM CALENDER & SYLLABUS</h6>
+                        <h6 className="mb-0">Home - EXAM CALENDAR & SYLLABUS</h6>
                       </div>
                       <div className="col-6 text-end">
                         <select
                           className="input-search"
-                          name="year"
-                          id="year"
-                          value={selectedYear}
-                          onChange={handleYearChange}
+                          name="folder"
+                          id="folder"
+                          value={selectedFolder}
+                          onChange={(e) => setSelectedFolder(e.target.value)}
                         >
-                          {Object?.keys(folderIds)?.map((year) => (
-                            <option key={year} value={year}>
-                              {year}
-                            </option>
-                          ))}
+                          <option value="">Select Year/Subfolder</option>
+                          {loadingSubfolders ? (
+                            <option value="" disabled>Loading Folders...</option>
+                          ) : (
+                            subfoldersForFiles.map((folder) => (
+                              <option key={folder} value={folder}>
+                                {folder}
+                              </option>
+                            ))
+                          )}
                         </select>
                       </div>
                     </div>
@@ -165,94 +144,44 @@ useEffect(() => {
                   <table className="table align-items-center mb-0">
                     <thead>
                       <tr>
-                        <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Year</th>
-                        <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Title</th>
+                        <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">File</th>
                         <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Download</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {loading ? (
-                        <div style={{ display: "flex", justifyContent: "center", marginLeft: "280px", marginBottom: "100px", textAlign: "center" }}>
-                          <span className="loader"></span>
-                        </div>
-                      ) : (
-                        currentItems && currentItems?.length >0 ? (
-                          currentItems?.slice()?.reverse()?.map((item, index) => (
-                            <tr key={item.id}>
-                              <td>
-                                <div className="d-flex px-2 py-1">
-                                  <p className="text-xs font-weight-bold mb-0">{selectedYear || "-"}</p>
-                                </div>
-                              </td>
-                              <td className="align-middle">
-                                <a
-                                  href="javascript:;"
-                                  className="text-secondary font-weight-bold text-xs"
-                                  data-toggle="tooltip"
-                                  data-original-title="Edit user"
-                                >
-                                  {item?.name}
-                                </a>
-                              </td>
-                              <td className="align-middle">
-                                <a
-                                  href="javascript:;"
-                                  className="text-secondary font-weight-bold text-xs"
-                                  data-toggle="tooltip"
-                                  data-original-title="Edit user"
-                                  onClick={() => openPDF(item?.webLink)}
-                                >
-                                  Download
-                                </a>
-                              </td>
-                            </tr>
-                          ))
-                        ) : (
-                          <tr>
-                            <td colSpan="3" className="text-center">
-                              <img style={{ width: "200px", height: "230px" }} src={images.empty} alt="Empty" />
-                              <p>No data found</p>
+                      {loadingFiles ? (
+                        <tr>
+                          <td colSpan="2" className="text-center">
+                            Loading Files...
+                          </td>
+                        </tr>
+                      ) : data && data.length > 0 ? (
+                        data.map((file, index) => (
+                          <tr key={index}>
+                            <td className="align-middle">
+                              {file}
+                            </td>
+                            <td className="align-middle">
+                              <a
+                                href={`${BASE_URL}/download/${selectedFolder}/${encodeURIComponent(file)}`}
+                                className="text-secondary font-weight-bold text-xs"
+                                // target="_blank"
+                                rel="noopener noreferrer"
+                                download={file}
+                              >
+                                Download
+                              </a>
                             </td>
                           </tr>
-                        )
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan="2" className="text-center">
+                            No files found
+                          </td>
+                        </tr>
                       )}
-
                     </tbody>
-                    <tfoot style={{ border: "none" }}>
-                      <tr style={{ border: "none" }}>
-                        <td colSpan="3" className="text-center" style={{ border: "none" }}>
-                          <div className="pagination">
-                            <button
-                              className="arrow btn-pageination"
-                              id="prevPage"
-                              disabled={currentPage === 1}
-                              onClick={() => handlePageChange(currentPage - 1)}
-                            >
-                              ← <span className="nav-text">PREV</span>
-                            </button>
-                            <div className="pages">
-                              {Array.from({ length: Math.ceil(data?.length / ITEMS_PER_PAGE) }).map((_, index) => (
-                                <div
-                                  className={`page-number ${currentPage === index + 1 ? 'active' : ''}`}
-                                  style={{ backgroundColor: currentPage === index + 1 ? '#66BB6A' : 'transparent', color: currentPage === index + 1 ? 'white' : 'black', fontWeight: "700" }}
-                                  onClick={() => handlePageChange(index + 1)}
-                                >
-                                  {index + 1}
-                                </div>
-                              ))}
-                            </div>
-                            <button
-                              className="arrow btn-pageination"
-                              id="nextPage"
-                              disabled={currentPage === Math.ceil(data?.length / ITEMS_PER_PAGE)}
-                              onClick={() => handlePageChange(currentPage + 1)}
-                            >
-                              <span className="nav-text">NEXT</span> →
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    </tfoot>
                   </table>
                 </div>
               </div>
@@ -260,8 +189,39 @@ useEffect(() => {
           </div>
         </div>
       </div>
+      {user?.isAdmin ?
+        <div>
+          <h2>Upload PDF:</h2>
+          <label>Select or Create Subfolder:</label>
+          <Select
+            options={optionsArrayForUpload}
+            value={selectedSubfolder}
+            onChange={(selectedOption) => {
+              setSelectedSubfolder(selectedOption);
+              setNewSubfolder('');
+            }}
+            isSearchable
+            isClearable
+            placeholder="Select or create subfolder..."
+          />
+          {!selectedSubfolder && (
+            <div>
+              <label htmlFor="newSubfolder">New Subfolder Name:</label>
+              <input
+                type="text"
+                id="newSubfolder"
+                value={newSubfolder}
+                onChange={(event) => setNewSubfolder(event.target.value)}
+              />
+            </div>
+          )}
+          <input type="file" accept=".pdf" onChange={handleFileChange} />
+          <button onClick={handleUpload}>Upload</button>
+        </div>
+        : null
+      }
     </div>
   );
 };
 
-export default ExamCalander;
+export default YourComponent;

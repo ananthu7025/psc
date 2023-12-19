@@ -161,6 +161,7 @@ function App() {
             <Route element={<Payment />} path="/payment" />
             <Route element={<PublicWeb />} path="/" />
             <Route element={<PrivacyPolicy/>} path="/privacy" />
+
             <Route
               path="createprofile"
               element={
