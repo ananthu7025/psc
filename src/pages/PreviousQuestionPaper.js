@@ -1,76 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import images from '../images';
 import { BASE_URL } from '../api/modules/api';
+import axios from 'axios';
+import { useGetUserDetailsQuery } from '../api/modules/login';
 import toast from 'react-hot-toast';
-
 const PreviousQuestionPaper = () => {
-  const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     setTimeout(() => setLoading(false), 3000);
   }, []);
-  
-  const folderStructure = {
-    '2024': {
-      'prelims': {
-        '10th': '1n1V3YLlzz0FZE1Q8tVzndm3ScT1aKe9z',
-        '12th': '1I1QbRH6qfeLMFVk1Ce6jox3h19VaPepd',
-        'degree': '1mNTeXhnWAFux1ustsNu8GATsf37NwP94',
-      },
-      'main': {
-        '10th': '1wGWpy2vI53n9iCghIWvgngx4a_a7Ru78',
-        '12th': '1ePkia9G9XiLYPIEZB8xA3tIOD1KciPkZ',
-        'degree': '1ufp_PMUmQSD_zjXE4XQIjDWK0hIjXuA6',
-      },
-    },
-    '2023': {
-      'main': {
-        '10th': '1W8DOBt4pJMq4I3u2np7xrOYyKdPzwYYe',
-        '12th': '1W8DOBt4pJMq4I3u2np7xrOYyKdPzwYYe',
-        'degree': '1W8DOBt4pJMq4I3u2np7xrOYyKdPzwYYe',
-      },
-      'prelims': {
-        '10th': '16tM3R0FxLBEaC-pvvs7eLwcSJfLC9fK5',
-        '12th': '1ZsWn69EjR85lElekMnYXd-HzT0RHA8kz',
-        'degree': '1TSg8BX_0OqHwG5MlaCXsn2rgzrMRRaMn',
-      },
-    },
-    '2022': {
-      'prelims': {
-        '10th': '1ACNQnOgu7SOw9ZpY3jfRxWSSifeZtFTU',
-        '12th': '1RQL3mMw92OaO6GrIdn8LFdopSX5DS11r',
-        'degree': '1ogVxEpilJ8XmXoKegXz-YnNCzdVqtN_-',
-      },
-      'main': {
-        '10th': '1Hnkfd0sdPS9FKz6-h55cIKaQfkPQGZw1',
-        '12th': '1LuTPA0fbXGTcOi1-K9GfUFaqnGNCZLVa',
-        'degree': '1WQ5q_SaiBRIe9SrK67Wo9jhLWHig4ZkB',
-      },
-    },
-    '2021': {
-      'prelims': {
-        '10th': '1FLImgdyDg9wtskzEvXWmsSWq0WL8_B-K',
-        '12th': '10a4orTvUYqLr4TK5Rik_V-vYihGBZQhm',
-        'degree': '1mm59yKsZDlag0ia_9OjvfhsCRT--k4kF',
-      },
-      'main': {
-        '10th': '1StscxseY5M3648Yw6YD3GtRJ8re5gqzB',
-        '12th': '1bo8a2Df8so_oMod7XzwmxdIYRoaek8Dv',
-        'degree': '1w7PvqzYjY4Fct7akhntT0JaxW6XrSTX4',
-      },
-    },
-  };
-  const [data,setData]=useState()
-  const [token, setToken] = useState(null); 
+  const [token, setToken] = useState(null);
   const ITEMS_PER_PAGE = 10;
   const [currentPage, setCurrentPage] = useState(1);
   const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
-  const currentItems = Array.isArray(data) ? data.slice(indexOfFirstItem, indexOfLastItem) : [];
   const [selectedYear, setSelectedYear] = useState('2022');
   const [selectedType, setSelectedType] = useState('prelims');
-  const [selectedGrade, setSelectedGrade] = useState('10th');
-  
+  const [selectedGrade, setSelectedGrade] = useState('10TH LEVEL');
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [uploadYear, setUploadYear] = useState('2022');
+  const [uploadType, setUploadType] = useState('prelims');
+  const [uploadGrade, setUploadGrade] = useState('10TH LEVEL');
+  const { data: user, refetch } = useGetUserDetailsQuery();
+
+  const currentItems = Array.isArray(data) ? data.slice(indexOfFirstItem, indexOfLastItem) : [];
+  console.log(currentItems)
   const openPDF = (webViewLink) => {
     window.open(webViewLink, '_blank');
 
@@ -80,98 +35,14 @@ const PreviousQuestionPaper = () => {
     setCurrentPage(page);
   };
 
-  useEffect(() => {
-    const newCode = localStorage.getItem("code");
-    const newToken = localStorage.getItem("gtoken");
 
-    if (newCode) {
-      if (newToken) {
-        getFiles(JSON.parse(newToken));
-      } else {
-        getToken(newCode);
-      }
-    } else {
-      getAuthURL();
-    }
-  }, []);
-
-  const getAuthURL = async () => {
-    try {
-      const response = await fetch(`${BASE_URL}/getAuthURL`);
-      const authURL = await response.text();
-      window.location.href = authURL;
-    } catch (error) {
-      console.error('Error fetching authorization URL:', error);
-      toast.error("Please Signin with Google")
-    }
-  };
-
-  const getToken = async (code) => {
-    try {
-      const response = await fetch(`${BASE_URL}/getToken`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ code }),
-      });
-
-      const token = await response.json();
-      setToken(token);
-      localStorage.setItem("gtoken", JSON.stringify(token)); 
-    } catch (error) {
-      console.error('Error fetching token:', error);
-      localStorage.removeItem("gtoken");
-      localStorage.removeItem("code");
-      getAuthURL();
-    }
-  };
-
-  const getFiles = async (token) => {
-    try {
-      const Select = folderStructure[selectedYear][selectedType][selectedGrade]
-
-      if (!Select&& Select === '') {
-        console.warn('Selected year is missing. Skipping API call.');
-        setData([])
-        return;
-      }
-      const response = await fetch(`${BASE_URL}/readDrive/${Select}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          access_token: token,
-        }),
-      });
-  
-      if (response.status === 500 || response.status ===404 ||response.status===400) {
-        localStorage.removeItem("gtoken");
-        localStorage.removeItem("code");
-        getAuthURL();
-      }
-      const files = await response.json();
-      setLoading(false);
-      setData(files);
-    } catch (error) {
-      console.error('Error fetching files:', error);
-      localStorage.removeItem("gtoken");
-      localStorage.removeItem("code");
-      getAuthURL();
-    }
-  };
-   
   const handleYearChange = (e) => {
     setSelectedYear(e.target.value);
     setCurrentPage(1)
 
   };
-  useEffect(() => {
-    const newToken = localStorage.getItem("gtoken");
-    getFiles(JSON.parse(newToken));
-  }, [selectedYear, selectedType, selectedGrade]);
- 
+
+
   useEffect(() => {
     setTimeout(() => setLoading(false), 3000);
   }, []);
@@ -187,8 +58,44 @@ const PreviousQuestionPaper = () => {
     setCurrentPage(1)
   };
 
-  
-  
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`${BASE_URL}/${selectedYear}/${selectedType}/${selectedGrade}`);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const files = await response.json();
+        setData(files);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [selectedYear, selectedType, selectedGrade]);
+  const [file, setFile] = useState(null);
+
+  // New function to handle file change
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+  };
+
+  const handleFileUpload = async () => {
+    const formData = new FormData();
+    formData.append('pdf', file);
+
+    try {
+      await axios.post(`${BASE_URL}/upload/${uploadYear}/${uploadType}/${uploadGrade}`, formData);
+      toast.success('File uploaded successfully'); 
+      window.location.reload()
+    } catch (error) {
+      console.error('File upload failed:', error.message);
+    }
+  };
+
   return (
     <div style={{ minHeight: "90vh" }} className="container-fluid py-4">
       <div className="row">
@@ -213,20 +120,18 @@ const PreviousQuestionPaper = () => {
                         <select
                           className="input-search"
                           name="year"
-                          style={{marginLeft:"5px",marginRight:"5px"}}
-
+                          style={{ marginLeft: "5px", marginRight: "5px" }}
                           value={selectedYear}
                           onChange={handleYearChange}
                         >
-                          {Object?.keys(folderStructure)?.map((year) => (
-                            <option key={year} value={year}>
-                              {year}
-                            </option>
-                          ))}
+                          <option value="2021">2021</option>
+                          <option value="2022">2022</option>
+                          <option value="2023">2023</option>
+                          <option value="2024">2024</option>
                         </select>
                         <select
                           className="input-search"
-                          style={{marginLeft:"5px",marginRight:"5px"}}
+                          style={{ marginLeft: "5px", marginRight: "5px" }}
 
 
                           name="type"
@@ -238,15 +143,15 @@ const PreviousQuestionPaper = () => {
                         </select>
                         <select
                           className="input-search"
-                          style={{marginLeft:"5px",marginRight:"5px"}}
+                          style={{ marginLeft: "5px", marginRight: "5px" }}
 
                           name="grade"
                           value={selectedGrade}
                           onChange={handleGradeChange}
                         >
-                          <option value="10th">10th</option>
-                          <option value="12th">12th</option>
-                          <option value="degree">Degree</option>
+                          <option value="10TH LEVEL">10TH LEVEL</option>
+                          <option value="12TH LEVEL">12th</option>
+                          <option value="DEGREE LEVEL">Degree</option>
                         </select>
                       </div>
                     </div>
@@ -265,9 +170,9 @@ const PreviousQuestionPaper = () => {
                           <span className="loader"></span>
                         </div>
                       ) : (
-                        currentItems &&  currentItems?.length > 0 ? (
+                        currentItems && currentItems?.length > 0 ? (
                           <React.Fragment>
-                            {currentItems && currentItems?.length > 0&&  currentItems?.map((item, index) => (
+                            {currentItems && currentItems?.length > 0 && currentItems?.map((item, index) => (
                               <tr key={item?.id}>
                                 <td>
                                   <div className="d-flex px-2 py-1">
@@ -276,21 +181,21 @@ const PreviousQuestionPaper = () => {
                                 </td>
                                 <td className="align-middle">
                                   <a
-                                    href="javascript:;"
+                                    href={`${BASE_URL}/download/${selectedYear}/${selectedType}/${selectedGrade}/${encodeURIComponent(item)}`}
+
                                     className="text-secondary font-weight-bold text-xs"
                                     data-toggle="tooltip"
                                     data-original-title="Edit user"
                                   >
-                                    {item?.name}
+                                    {item}
                                   </a>
                                 </td>
                                 <td className="align-middle">
                                   <a
-                                    href="javascript:;"
+                                    href={`${BASE_URL}/download/${selectedYear}/${selectedType}/${selectedGrade}/${encodeURIComponent(item)}`}
                                     className="text-secondary font-weight-bold text-xs"
                                     data-toggle="tooltip"
                                     data-original-title="Edit user"
-                                    onClick={() => openPDF(item?.webLink)}
                                   >
                                     Download
                                   </a>
@@ -346,6 +251,57 @@ const PreviousQuestionPaper = () => {
                     </tfoot>
                   </table>
                 </div>
+
+{user?.isAdmin && (
+  <div className='upload' style={{ marginTop: '20px', padding: '10px', border: '1px solid #ccc', borderRadius: '5px' }}>
+    <div className="col-md-2">
+      <select
+        className="form-control"
+        value={uploadYear}
+        onChange={(e) => setUploadYear(e.target.value)}
+        style={{ border: '1px solid #ccc', borderRadius: '3px' }} // Add border styles here
+      >
+        <option value="2021">2021</option>
+        <option value="2022">2022</option>
+        <option value="2023">2023</option>
+        <option value="2024">2024</option>
+      </select>
+    </div>
+    <div className="col-md-2">
+      <select
+        className="form-control"
+        value={uploadType}
+        onChange={(e) => setUploadType(e.target.value)}
+        style={{ border: '1px solid #ccc', borderRadius: '3px' }} // Add border styles here
+      >
+        <option value="prelims">Prelims</option>
+        <option value="main">Main</option>
+      </select>
+    </div>
+    <div className="col-md-2">
+      <select
+        className="form-control"
+        value={uploadGrade}
+        onChange={(e) => setUploadGrade(e.target.value)}
+        style={{ border: '1px solid #ccc', borderRadius: '3px' }} // Add border styles here
+      >
+        <option value="10TH LEVEL">10TH LEVEL</option>
+        <option value="12TH LEVEL">12th</option>
+        <option value="DEGREE LEVEL">Degree</option>
+      </select>
+    </div>
+    <div className="col-md-3">
+      <input type="file" className="form-control" id="file" onChange={(e) => setFile(e.target.files[0])} />
+    </div>
+    <div className="col-md-2">
+      <button className="btn btn-primary" onClick={handleFileUpload} disabled={!file}>
+        Upload
+      </button>
+    </div>
+  </div>
+)}
+
+
               </div>
             </div>
           </div>
