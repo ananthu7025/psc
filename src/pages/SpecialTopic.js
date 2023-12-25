@@ -13,7 +13,6 @@ const SpecialTopic = () => {
   const [newSubfolder, setNewSubfolder] = useState('');
   const fileInputRef = useRef(null);
   const { data, refetch } = useGetUserDetailsQuery();
-
   useEffect(() => {
     updateFolders();
   }, []);

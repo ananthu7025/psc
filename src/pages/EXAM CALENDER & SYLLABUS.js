@@ -156,7 +156,13 @@ const YourComponent = () => {
                           </td>
                         </tr>
                       ) : data && data.length > 0 ? (
-                        data.map((file, index) => (
+                        data
+                        .sort((a, b) => {
+                          const numberA = parseInt(a?.match(/\d+/)) || 0;
+                          const numberB = parseInt(b?.match(/\d+/)) || 0;
+                          return numberA - numberB;
+                        })
+                        .map((file, index) => (
                           <tr key={index}>
                             <td className="align-middle">
                               {file}

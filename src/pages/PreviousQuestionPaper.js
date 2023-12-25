@@ -89,7 +89,7 @@ const PreviousQuestionPaper = () => {
 
     try {
       await axios.post(`${BASE_URL}/upload/${uploadYear}/${uploadType}/${uploadGrade}`, formData);
-      toast.success('File uploaded successfully'); 
+      toast.success('File uploaded successfully');
       window.location.reload()
     } catch (error) {
       console.error('File upload failed:', error.message);
@@ -252,56 +252,54 @@ const PreviousQuestionPaper = () => {
                   </table>
                 </div>
 
-{user?.isAdmin && (
-  <div className='upload' style={{ marginTop: '20px', padding: '10px', border: '1px solid #ccc', borderRadius: '5px' }}>
-    <div className="col-md-2">
-      <select
-        className="form-control"
-        value={uploadYear}
-        onChange={(e) => setUploadYear(e.target.value)}
-        style={{ border: '1px solid #ccc', borderRadius: '3px' }} // Add border styles here
-      >
-        <option value="2021">2021</option>
-        <option value="2022">2022</option>
-        <option value="2023">2023</option>
-        <option value="2024">2024</option>
-      </select>
-    </div>
-    <div className="col-md-2">
-      <select
-        className="form-control"
-        value={uploadType}
-        onChange={(e) => setUploadType(e.target.value)}
-        style={{ border: '1px solid #ccc', borderRadius: '3px' }} // Add border styles here
-      >
-        <option value="prelims">Prelims</option>
-        <option value="main">Main</option>
-      </select>
-    </div>
-    <div className="col-md-2">
-      <select
-        className="form-control"
-        value={uploadGrade}
-        onChange={(e) => setUploadGrade(e.target.value)}
-        style={{ border: '1px solid #ccc', borderRadius: '3px' }} // Add border styles here
-      >
-        <option value="10TH LEVEL">10TH LEVEL</option>
-        <option value="12TH LEVEL">12th</option>
-        <option value="DEGREE LEVEL">Degree</option>
-      </select>
-    </div>
-    <div className="col-md-3">
-      <input type="file" className="form-control" id="file" onChange={(e) => setFile(e.target.files[0])} />
-    </div>
-    <div className="col-md-2">
-      <button className="btn btn-primary" onClick={handleFileUpload} disabled={!file}>
-        Upload
-      </button>
-    </div>
-  </div>
-)}
-
-
+                {user?.isAdmin && (
+                  <div className='upload' style={{ marginTop: '20px', padding: '10px', border: '1px solid #ccc', borderRadius: '5px' }}>
+                    <div className="col-md-2">
+                      <select
+                        className="form-control"
+                        value={uploadYear}
+                        onChange={(e) => setUploadYear(e.target.value)}
+                        style={{ border: '1px solid #ccc', borderRadius: '3px' }} // Add border styles here
+                      >
+                        <option value="2021">2021</option>
+                        <option value="2022">2022</option>
+                        <option value="2023">2023</option>
+                        <option value="2024">2024</option>
+                      </select>
+                    </div>
+                    <div className="col-md-2">
+                      <select
+                        className="form-control"
+                        value={uploadType}
+                        onChange={(e) => setUploadType(e.target.value)}
+                        style={{ border: '1px solid #ccc', borderRadius: '3px' }} // Add border styles here
+                      >
+                        <option value="prelims">Prelims</option>
+                        <option value="main">Main</option>
+                      </select>
+                    </div>
+                    <div className="col-md-2">
+                      <select
+                        className="form-control"
+                        value={uploadGrade}
+                        onChange={(e) => setUploadGrade(e.target.value)}
+                        style={{ border: '1px solid #ccc', borderRadius: '3px' }} // Add border styles here
+                      >
+                        <option value="10TH LEVEL">10TH LEVEL</option>
+                        <option value="12TH LEVEL">12th</option>
+                        <option value="DEGREE LEVEL">Degree</option>
+                      </select>
+                    </div>
+                    <div className="col-md-3">
+                      <input type="file" className="form-control" id="file" onChange={(e) => setFile(e.target.files[0])} />
+                    </div>
+                    <div className="col-md-2">
+                      <button className="btn btn-primary" onClick={handleFileUpload} disabled={!file}>
+                        Upload
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
