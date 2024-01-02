@@ -38,9 +38,76 @@ const Questions = () => {
   const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
   const currentItems = data?.slice(indexOfFirstItem, indexOfLastItem);
-
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
+  };
+  
+  const renderPageNumbers = () => {
+    const totalItems = data?.length;
+    const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
+    const maxPageNumbersToShow = 5;
+  
+    if (totalPages <= maxPageNumbersToShow) {
+      return Array.from({ length: totalPages }).map((_, index) => (
+        <div
+          key={index}
+          className={`page-number ${currentPage === index + 1 ? 'active' : ''}`}
+          style={{
+            backgroundColor: currentPage === index + 1 ? '#66BB6A' : 'transparent',
+            color: currentPage === index + 1 ? 'white' : 'black',
+            fontWeight: "700",
+          }}
+          onClick={() => handlePageChange(index + 1)}
+        >
+          {index + 1}
+        </div>
+      ));
+    }
+  
+    const pageNumbers = [];
+    const startPage = Math.max(1, currentPage - Math.floor(maxPageNumbersToShow / 2));
+    const endPage = Math.min(totalPages, startPage + maxPageNumbersToShow - 1);
+  
+    if (startPage > 1) {
+      pageNumbers.push(
+        <div key={1} className="page-number" onClick={() => handlePageChange(1)}>
+          1
+        </div>
+      );
+      if (startPage > 2) {
+        pageNumbers.push(<div key="dotsStart" className="page-number dots">...</div>);
+      }
+    }
+  
+    for (let i = startPage; i <= endPage; i++) {
+      pageNumbers.push(
+        <div
+          key={i}
+          className={`page-number ${currentPage === i ? 'active' : ''}`}
+          style={{
+            backgroundColor: currentPage === i ? '#66BB6A' : 'transparent',
+            color: currentPage === i ? 'white' : 'black',
+            fontWeight: "700",
+          }}
+          onClick={() => handlePageChange(i)}
+        >
+          {i}
+        </div>
+      );
+    }
+  
+    if (endPage < totalPages) {
+      if (endPage < totalPages - 1) {
+        pageNumbers.push(<div key="dotsEnd" className="page-number dots">...</div>);
+      }
+      pageNumbers.push(
+        <div key={totalPages} className="page-number" onClick={() => handlePageChange(totalPages)}>
+          {totalPages}
+        </div>
+      );
+    }
+  
+    return pageNumbers;
   };
   return (
     <div style={{ minHeight: "90vh" }} className="container-fluid py-4">
@@ -135,16 +202,8 @@ const Questions = () => {
                               ← <span className="nav-text">PREV</span>
                             </button>
                             <div className="pages">
-                              {Array.from({ length: Math.ceil(data?.length / ITEMS_PER_PAGE) }).map((_, index) => (
-                                <div
-                                  className={`page-number ${currentPage === index + 1 ? 'active' : ''}`}
-                                  style={{ backgroundColor: currentPage === index + 1 ? '#66BB6A' : 'transparent', color: currentPage === index + 1 ? 'white' : 'black', fontWeight: "700" }}
-                                  onClick={() => handlePageChange(index + 1)}
-                                >
-                                  {index + 1}
-                                </div>
-                              ))}
-                            </div>
+  {renderPageNumbers()}
+</div>
                             <button
                               className="arrow btn-pageination"
                               id="nextPage"

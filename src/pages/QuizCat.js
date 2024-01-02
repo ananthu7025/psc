@@ -15,8 +15,11 @@ function QuizCat() {
   });
 
   useEffect(() => {
+    setSelectedSubCategory(subCategoryOptions[selectedCategory]?.[0] || '');
     setIsLoading(fetchIsLoading);
-  }, [fetchIsLoading]);
+    setError(fetchError);
+  }, [selectedCategory, fetchIsLoading, fetchError]);
+  
 
   useEffect(() => {
     setError(fetchError);
@@ -37,7 +40,7 @@ function QuizCat() {
     'സയൻസ്': ['ഫിസിക്സ്', 'കെമിസ്റ്ററി', 'ബയോളജി','ഇൻഫർമേഷൻ ടെക്നോളജി'],
     'ജിയോഗ്രാഫ്യ്': ['കേരള  ജിയോഗ്രാഫ്യ്','ഇന്ത്യൻ ജിയോഗ്രാഫ്യ്','വേൾഡ്  ജിയോഗ്രാഫ്യ്'],
   };
-
+console.log(selectedCategory,selectedSubCategory)
   return (
     fetchedQuestions && !fetchedQuestions?.length > 0 ? (
       <main className="main-content mt-0">

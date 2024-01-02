@@ -7,7 +7,7 @@ import { BASE_URL } from '../../api/modules/api';
 const CreateQuestionComponent = () => {
   const { questionId } = useParams();
   const [formData, setFormData] = useState({
-    category: 'സോഷ്യൽ സയൻസ്',
+    category: 'ഇന്ത്യൻ ഇക്‌ണോമിക്‌സ്',
     subCategory: '',
     questionText: '',
     options: [''],
@@ -25,7 +25,7 @@ const CreateQuestionComponent = () => {
   };
 
   const navigate = useNavigate();
-
+console.log(formData)
   useEffect(() => {
     const fetchData = async () => {
       if (questionId) {
@@ -52,7 +52,22 @@ const CreateQuestionComponent = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+
+    // Check if the changed field is 'category'
+    if (name === 'category') {
+      const newSubCategoryOptions = subCategoryOptions[value] || [''];
+      
+      setFormData({
+        ...formData,
+        [name]: value,
+        subCategory: newSubCategoryOptions[0], // Set the first subcategory by default
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
   };
 
   const handleOptionChange = (e, index) => {
@@ -101,6 +116,7 @@ const CreateQuestionComponent = () => {
     const correctAnswer = parseInt(e.target.value, 10);
     setFormData({ ...formData, correctAnswer });
   };
+
 
   return (
     <div style={styles.container}>
