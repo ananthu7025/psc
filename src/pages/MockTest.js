@@ -79,7 +79,7 @@ const MockTest = ({ fetchedQuestions, setFetchedQuestions }) => {
   const closeModal = () => {
     setShowModal(false);
   };
-  const [timeLeft, setTimeLeft] = useState(180);
+  const [timeLeft, setTimeLeft] = useState(35 * 60);
 
   const formatTime = (time) => {
     const minutes = Math.floor(time / 60);
@@ -150,9 +150,7 @@ const MockTest = ({ fetchedQuestions, setFetchedQuestions }) => {
               <a href="#">
                 <span className="question-num">Question {currentQuestionIndex + 1}/{fetchedQuestions && fetchedQuestions?.length}</span>
               </a>
-              <a href="#">
-                <span className="question-help">Need Help?</span>
-              </a>
+              <h5>Time Left: {formatTime(timeLeft)}</h5>
             </p>
             <div style={{ flexDirection: "column" }} className="d-flex">
               <ul className="question-nums-list">
@@ -164,7 +162,6 @@ const MockTest = ({ fetchedQuestions, setFetchedQuestions }) => {
                   </li>
                 ))}
               </ul>
-              <h5 style={{ marginTop: "30px" }}>Time Left: {formatTime(timeLeft)}</h5>
             </div>
 
           </section>

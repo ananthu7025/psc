@@ -34,6 +34,11 @@ const UserList = () => {
     const handlePageChange = (newPage) => {
       setCurrentPage(newPage);
     };
+    const formatDate = (dateString) => {
+        const options = { day: 'numeric', month: 'short' };
+        return new Date(dateString).toLocaleDateString('en-US', options);
+    };
+    
     return (
         <div style={{ minHeight: "90vh" }} className="container-fluid py-4">
             <div className="row">
@@ -64,6 +69,7 @@ const UserList = () => {
                                                 <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">District</th>
                                                 <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Phone</th>
                                                 <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">IsPaid</th>
+                                                <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Joining Date</th>
                                             </tr>
                                         </thead>
 
@@ -87,6 +93,9 @@ const UserList = () => {
                                                                     onChange={() => handleIsPaidToggle(item?._id, item?.isPaid)}
                                                                 />
                                                             </td>
+                                                            <td>{formatDate(item?.otpCreatedAt)}</td>
+
+
                                                         </tr>
                                                     ))
                                                 ) : (

@@ -24,6 +24,7 @@ import PublicWeb from './public';
 import Questions from './pages/Admin/Questions';
 import CreateCat from './pages/Admin/createCat';
 import PrivacyPolicy from './public/privacy';
+import ViewTest from './pages/ViewTest';
 
 function App() {
 
@@ -153,6 +154,14 @@ function App() {
                 element={
                   <Layout>
                     <CreateCat/>
+                  </Layout>
+                }
+              />
+                  <Route
+                path="view-test/:id"
+                element={
+                  <Layout>
+                    <ViewTest/>
                   </Layout>
                 }
               />

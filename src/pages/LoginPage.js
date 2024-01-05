@@ -42,35 +42,58 @@ const LoginPage = () => {
     }
   };
 
-  const handleOtpChange = (index, value) => {
-    const updatedOtp = [...otp];
-    updatedOtp[index] = value;
-    setOtp(updatedOtp);
-  };
+
 
   const handleOtpSubmit = async () => {
     try {
       const otpValue = otp.join('');
       const res = await signUp({ email, otp: otpValue });
+
       if (res?.data) {
         toast.success(res.data.message);
-      }
-      if (res?.data?.user?.isCreated) {
-        if (res?.data?.user?.isPaid) {
-          navigate('/Profile');
+
+        if (res?.data?.user?.isCreated) {
+          if (res?.data?.user?.isPaid) {
+            navigate('/Profile');
+          } else {
+            navigate('/payment');
+          }
         } else {
-          navigate('/payment');
+          navigate('/createprofile');
         }
       } else {
-        navigate('/createprofile');
+        console.error('Invalid response format:', res);
+        toast.error('Something went wrong please check the otp');
       }
     } catch (error) {
       console.error('SignUp Error:', error);
       toast.error('Something went wrong');
-      navigate('/');
     }
   };
 
+  const handleOtpChange = (index, value) => {
+    const updatedOtp = [...otp];
+    updatedOtp[index] = value;
+    setOtp(updatedOtp);
+
+    if (value === '' && index > 0) {
+      // If backspace is pressed and the current input is empty, focus on the previous input
+      document.getElementById(`otp-input-${index - 1}`).focus();
+    } else if (index < otp.length - 1 && value !== '') {
+      // If a digit is entered and not at the last input, focus on the next input
+      document.getElementById(`otp-input-${index + 1}`).focus();
+    }
+  };
+
+  const handleArrowKeys = (index, keyCode) => {
+    if (keyCode === 37 && index > 0) {
+      // Left arrow key: Focus on the previous input
+      document.getElementById(`otp-input-${index - 1}`).focus();
+    } else if (keyCode === 39 && index < otp.length - 1) {
+      // Right arrow key: Focus on the next input
+      document.getElementById(`otp-input-${index + 1}`).focus();
+    }
+  };
 
   const handlePaste = (e) => {
     e.preventDefault();
@@ -163,14 +186,17 @@ const LoginPage = () => {
                             <input
                               type="text"
                               className="otp-digit"
+                              id={`otp-input-${index}`}
                               key={index}
                               maxLength="1"
                               value={digit}
                               onChange={(e) => handleOtpChange(index, e.target.value)}
+                              onKeyDown={(e) => handleArrowKeys(index, e.keyCode)}
                               onPaste={handlePaste}
                             />
                           ))}
                         </div>
+
                         <div className="text-center">
 
                           <button
@@ -181,13 +207,13 @@ const LoginPage = () => {
                           >
                             {isSignUpLoading ? 'Verifying OTP...' : 'Verify OTP'}
                           </button>
-                          <button className="button-as-text"style={{ textDecoration: "none", color: "blue", border: "none", background: "none", cursor: "pointer", fontSize: "15px",marginTop:"30px" }} onClick={handleResend}>Resend Otp</button>
+                          <button className="button-as-text" style={{ textDecoration: "none", color: "blue", border: "none", background: "none", cursor: "pointer", fontSize: "15px", marginTop: "30px" }} onClick={handleResend}>Resend Otp</button>
 
                         </div>
                       </form>
                     )}
                   </div>
-                
+
                 </div>
               </div>
             </div>

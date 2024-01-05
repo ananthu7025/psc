@@ -4,13 +4,24 @@ import { useGetUserDetailsQuery } from '../api/modules/login';
 import { useGetReferalQuery } from '../api/modules/admin';
 import toast from 'react-hot-toast';
 import images from '../images';
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
   const [isRefech, setIsRefech] = useState(false)
   const { data: user } = useGetUserDetailsQuery();
   const { data, refetch } = useGetResultQuery(user?._id);
   const { data: referal } = useGetReferalQuery();
+  const [quizDetails, setQuizDetails] = useState(null)
+  const navigate = useNavigate();
 
+  const viewQuizDetails = async (resultID) => {
+    try {
+      navigate(`/view-test/${resultID}`);
+    } catch (error) {
+      console.error('Failed to fetch quiz details:', error);
+      toast.error('Failed to fetch quiz details');
+    }
+  };
   useEffect(() => {
 
     refetch()
@@ -26,7 +37,7 @@ const Dashboard = () => {
     (referral) => referral.referrerEmail === user?.email
   );
   const copyToClipboard = (text) => {
-        navigator.clipboard.writeText(text)
+    navigator.clipboard.writeText(text)
       .then(() => {
         toast.success("referal code copied");
 
@@ -62,16 +73,21 @@ const Dashboard = () => {
                         <h6 className="text-dark text-sm font-weight-bold mb-0">
                           {new Date(result?.createdAt).toLocaleDateString()}
                         </h6>
-                        <p className="text-secondary font-weight-bold text-xs mt-1 mb-0">
-                          Score: {result?.score}
-                        </p>
+                        <div className='d-flex'>
+                          <p className="text-secondary font-weight-bold text-xs mt-1 mb-0">
+                            Score: {result?.score}
+                          </p>
+                          <button style={{ marginTop: "-12px" }} className="btn btn-link" onClick={() => viewQuizDetails(result._id)}>
+                            View
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
                 ))
               ) : (
                 <div style={{ display: "flex", justifyContent: "center", flexDirection: "column" }}>
-                  <img className='Img-nodata'  src={images.empty} alt="Empty" />
+                  <img className='Img-nodata' src={images.empty} alt="Empty" />
                   <p style={{ textAlign: "center" }}>No scores available for this month.</p>
                 </div>
               )}
@@ -105,7 +121,7 @@ const Dashboard = () => {
                 ))
               ) : (
                 <div style={{ display: "flex", justifyContent: "center", flexDirection: "column" }}>
-                  <img className='Img-nodata'  src={images.empty} alt="Empty" />
+                  <img className='Img-nodata' src={images.empty} alt="Empty" />
                   <p style={{ textAlign: "center" }}>No Referals to show .</p>
                 </div>
               )}
