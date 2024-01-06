@@ -21,36 +21,51 @@ function Payment() {
     }
   }, [data, navigate]);
   return (
-    <div>
-      <div className="main-payment">
-        <div style={{ marginTop: "-30px" }} className="lefttext">
-          <div className="textwrap">
-            <h1>PSC GREEN</h1>
-            <p>Subscribe to PSC GREEN and  get access to our resources. Take part in mock tests designed to enhance your learning experience and open up opportunities for a career in the Public Service Commission (PSC) jobs.</p>
-            <div style={{ margin: "20px" }} className="subscription-options">
-              <label>
-                Standard -Rs 250 (6 Months)
-                <p>Refer a friend for Standard plan and get Rs 100 cashback!</p>
-              </label>
-              <label>
-                Premium -Rs 450 (1 year)
-                <p>Refer a friend for Premium plan and get Rs 200 cashback!</p>
-              </label>
-              <label>
-                pscgreenlearning@ybl
-              </label>
-            </div>
-            <p style={{ marginTop: '10px' }}>
-                If payment is done, please send a message to +91 9846243060, and your account will be active in a day.
-              </p>
-            <button onClick={handleContactUs}>Contact Us</button>
-          </div>
-        </div>
-        <div style={{ marginTop: "50px" }} className="rightimage">
-          <img style={{ marginTop: "50px" }} src={images.qr} />
-        </div>
-      </div>
-    </div>
+<div className="how-section1">
+<div className="row">
+  <div className="col-md-6 how-img">
+    <img
+      src={images.qrTwofity}
+      className=" img-fluid"
+      alt=""
+    />
+  </div>
+  <div className="col-md-6">
+    <h4>Standard Plan - Rs 250 (6 Months)</h4>
+    <h4 className="subheading">
+      Subscribe to PSC GREEN and get access to our resources.
+    </h4>
+    <p className="text-muted">
+      Take part in mock tests designed to enhance your learning experience and open up opportunities for a career in the Public Service Commission (PSC) jobs.
+    </p>
+    <p>Refer a friend for the Standard plan and get Rs 100 cashback!</p>
+    <p>If payment is done, please send a message to +91 9846243060, and your account will be active within a day.</p>
+  </div>
+</div>
+
+<div className="row">
+  <div className="col-md-6">
+    <h4>Premium Plan - Rs 450 (1 Year)</h4>
+    <h4 className="subheading">
+      Subscribe to PSC GREEN and get access to our premium resources.
+    </h4>
+    <p className="text-muted">
+      Take advantage of a comprehensive package with extended benefits, including exclusive content and additional features. Elevate your PSC exam preparation with the Premium Plan.
+    </p>
+    <p>Refer a friend for the Premium plan and get Rs 200 cashback!</p>
+    <p>If payment is done, please send a message to +91 9846243060, and your account will be active within a day.</p>
+  </div>
+  <div className="col-md-6 how-img">
+    <img
+          src={images.qrFour}
+      className=" img-fluid"
+      alt=""
+    />
+  </div>
+</div>
+
+</div>
+
 
 
 
