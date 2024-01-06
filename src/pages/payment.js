@@ -35,11 +35,8 @@ function Payment() {
     <h4 className="subheading">
       Subscribe to PSC GREEN and get access to our resources.
     </h4>
-    <p className="text-muted">
-      Take part in mock tests designed to enhance your learning experience and open up opportunities for a career in the Public Service Commission (PSC) jobs.
-    </p>
     <p>Refer a friend for the Standard plan and get Rs 100 cashback!</p>
-    <p>If payment is done, please send a message to +91 9846243060, and your account will be active within a day.</p>
+    <p>If payment is done, please send a message to +91 9846243068, and your account will be active within a day.</p>
   </div>
 </div>
 
@@ -49,11 +46,8 @@ function Payment() {
     <h4 className="subheading">
       Subscribe to PSC GREEN and get access to our premium resources.
     </h4>
-    <p className="text-muted">
-      Take advantage of a comprehensive package with extended benefits, including exclusive content and additional features. Elevate your PSC exam preparation with the Premium Plan.
-    </p>
     <p>Refer a friend for the Premium plan and get Rs 200 cashback!</p>
-    <p>If payment is done, please send a message to +91 9846243060, and your account will be active within a day.</p>
+    <p>If payment is done, please send a message to +91 9846243068, and your account will be active within a day.</p>
   </div>
   <div className="col-md-6 how-img">
     <img
