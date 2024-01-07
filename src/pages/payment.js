@@ -36,7 +36,7 @@ function Payment() {
       Subscribe to PSC GREEN and get access to our resources.
     </h4>
     <p>Refer a friend for the Standard plan and get Rs 100 cashback!</p>
-    <p>If payment is done, please send a message to +91 9846243068, and your account will be active within a day.</p>
+    <p>If payment is done, please send a whatsapp  message to +91 9846243068, and your account will be active within a day.</p>
   </div>
 </div>
 
@@ -47,7 +47,7 @@ function Payment() {
       Subscribe to PSC GREEN and get access to our premium resources.
     </h4>
     <p>Refer a friend for the Premium plan and get Rs 200 cashback!</p>
-    <p>If payment is done, please send a message to +91 9846243068, and your account will be active within a day.</p>
+    <p>If payment is done, please send a whatsapp  message to +91 9846243068, and your account will be active within a day.</p>
   </div>
   <div className="col-md-6 how-img">
     <img

@@ -369,7 +369,7 @@ const PublicWeb = () => {
               </p>
               <div className="wrapper">
                 <span className="span">Call:</span>
-                <a href="tel:+011234567890" className="footer-link">+91 9846243060</a>
+                <a href="tel:+91 9846243068" className="footer-link">+91 9846243068</a>
               </div>
               <div className="wrapper">
                 <span className="span">Email:</span>

@@ -92,13 +92,13 @@ const Profile = () => {
                   </p>
                   <li className="list-group-item border-0 ps-0 text-sm">
                     <strong className="text-dark">Join Our Whatsapp group:</strong> &nbsp;
-                    <a href="https://chat.whatsapp.com/DeQUkcFJFp87EQgjdrsyqC" target="_blank" rel="noopener noreferrer">
+                    <a href="https://chat.whatsapp.com/LlfrZBJZMhQ59H7Gs8Ev6Z" target="_blank" rel="noopener noreferrer">
                       <i className="fab fa-whatsapp"></i> WhatsApp Group Link
                     </a>
                   </li>
                   <li className="list-group-item border-0 ps-0 text-sm">
                     <strong className="text-dark">Join Our Telegram group:</strong> &nbsp;
-                    <a href="https://t.me/+MGOr_N97vJo2Zjg1" target="_blank" rel="noopener noreferrer">
+                    <a href="https://telegram.me/+BpXqIKhwUc43ZTE1" target="_blank" rel="noopener noreferrer">
                       <i className="fab fa-telegram"></i> Telegram Group Link
                     </a>
                   </li>
