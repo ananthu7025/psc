@@ -7,20 +7,27 @@ const Navbar = ({ toggleSidebar }) => {
   const location = useLocation();
   const currentPath = location.pathname;
   const { data: user } = useGetUserDetailsQuery();
+
   useEffect(() => {
     const iconNavbarSidenav = document.getElementById('iconNavbarSidenav');
 
+    const handleToggleSidebar = () => {
+      toggleSidebar();
+    };
     if (iconNavbarSidenav) {
-      iconNavbarSidenav.addEventListener('click', toggleSidebar);
+      iconNavbarSidenav.addEventListener('click', handleToggleSidebar);
     }
-
     return () => {
-      // Cleanup: remove event listener when the component is unmounted
       if (iconNavbarSidenav) {
-        iconNavbarSidenav.removeEventListener('click', toggleSidebar);
+        iconNavbarSidenav.removeEventListener('click', handleToggleSidebar);
       }
     };
-  }, [toggleSidebar]);
+  }, [toggleSidebar, location.pathname]);
+
+  useEffect(() => {
+    toggleSidebar();
+  }, [location.pathname]);
+  
   return (
     <nav
   className="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl"
