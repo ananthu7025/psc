@@ -25,7 +25,9 @@ const Navbar = ({ toggleSidebar }) => {
   }, [toggleSidebar, location.pathname]);
 
   useEffect(() => {
-    if(location.pathname)
+
+    console.log(currentPath !== 'Profile')
+    if(currentPath !== '/Profile')
     toggleSidebar();
   }, [location.pathname]);
   
