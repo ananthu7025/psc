@@ -25,6 +25,7 @@ const Navbar = ({ toggleSidebar }) => {
   }, [toggleSidebar, location.pathname]);
 
   useEffect(() => {
+    if(location.pathname)
     toggleSidebar();
   }, [location.pathname]);
   
