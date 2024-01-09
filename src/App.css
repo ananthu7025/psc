@@ -28128,7 +28128,6 @@ td{
     flex-direction: column;
   }
 }
-/* Add these styles to your CSS */
 .correct-answer {
   background-color: green; /* or any style you want for correct answer */
 }
@@ -28140,3 +28139,4 @@ td{
 .correct-and-user-selected {
   background-color: green; /* or any style you want for correct and user-selected answer */
 }
+

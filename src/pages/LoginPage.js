@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { useLoginMutation, useResendOtpMutation, useSignUpMutation } from '../api/modules/login';
 import { useNavigate } from 'react-router-dom';
@@ -54,7 +53,7 @@ const LoginPage = () => {
 
         if (res?.data?.user?.isCreated) {
           if (res?.data?.user?.isPaid) {
-            navigate('/Profile');
+            navigate('/home');
           } else {
             navigate('/payment');
           }
@@ -77,20 +76,16 @@ const LoginPage = () => {
     setOtp(updatedOtp);
 
     if (value === '' && index > 0) {
-      // If backspace is pressed and the current input is empty, focus on the previous input
       document.getElementById(`otp-input-${index - 1}`).focus();
     } else if (index < otp.length - 1 && value !== '') {
-      // If a digit is entered and not at the last input, focus on the next input
       document.getElementById(`otp-input-${index + 1}`).focus();
     }
   };
 
   const handleArrowKeys = (index, keyCode) => {
     if (keyCode === 37 && index > 0) {
-      // Left arrow key: Focus on the previous input
       document.getElementById(`otp-input-${index - 1}`).focus();
     } else if (keyCode === 39 && index < otp.length - 1) {
-      // Right arrow key: Focus on the next input
       document.getElementById(`otp-input-${index + 1}`).focus();
     }
   };

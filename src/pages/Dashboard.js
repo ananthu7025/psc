@@ -48,6 +48,9 @@ const Dashboard = () => {
 
       });
   };
+  const sortedScores = currentMonthScores
+  ? [...currentMonthScores].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+  : [];
   return (
     <div className="container-fluid py-4" style={{ minHeight: "90vh" }}>
       <div className='mb-4 mt-3'>
@@ -60,8 +63,8 @@ const Dashboard = () => {
               <h6>Your Score</h6>
             </div>
             <div className="card-body p-3">
-              {currentMonthScores && currentMonthScores.length > 0 ? (
-                currentMonthScores?.map((result) => (
+              {sortedScores && sortedScores.length > 0 ? (
+                sortedScores?.map((result) => (
                   <div key={result._id} className="timeline timeline-one-side">
                     <div className="timeline-block mb-3">
                       <span className="timeline-step">

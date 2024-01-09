@@ -227,6 +227,47 @@ const PublicWeb = () => {
 
             </div>
           </section>
+
+
+          <p className="section-title"><span className='section-title span'>Our Contents</span></p>
+
+          <section  className="section about" id="about" aria-label="about">
+            <div style={{padding:"10px"}} className="container">
+              <div className="about-content">
+              <p className="section-subtitle">SCRT STUDY PLANS</p>
+
+                <p className="section-text">
+                Our specialized study plans, aligned with the SCERT syllabus, empower learners with a structured approach, ensuring thorough preparation for the Kerala PSC exam
+                </p>
+              </div>
+              <img src={images.one} style={{width:"100%",height:"100%"}}/>
+
+
+            </div>
+            <div style={{padding:"10px"}}  className="container mt-4">
+              <div className="about-content">
+              <p className="section-subtitle">MOCK TESTS</p>
+
+                <p className="section-text">
+                Immerse yourself in a simulated exam environment through our meticulously crafted mock tests, designed to replicate the complexity of the Kerala PSC examination.
+              Our mock tests cover a wide spectrum of categories, ensuring a comprehensive practice experience for aspirants targeting different sections of the Kerala PSC syllabus.
+                </p>
+              </div>
+              <img src={images.two} style={{width:"100%",height:"100%"}}/>
+
+            </div>
+            <div style={{padding:"10px"}}  className="container mt-4">
+              <div className="about-content">
+              <p className="section-subtitle">PREVIOUS YEAR QUESTIONS</p>
+
+                <p className="section-text">
+                Access a treasure trove of knowledge with our extensive collection of previous year question papers, empowering students to delve into the intricacies of the Kerala PSC exam pattern and refine their preparation strategies
+                </p>
+              </div>
+              <img src={images.theree} style={{width:"100%",height:"100%"}}/>
+
+            </div>
+          </section>
           <section className="section course" id="courses" aria-label="course">
             <div className="container">
 
@@ -357,6 +398,7 @@ const PublicWeb = () => {
 
             </div>
           </section>
+          
         </article>
       </main>
       <footer className="footer" style={{ backgroundImage: "url('./assets/images/footer-bg.png')" }}>

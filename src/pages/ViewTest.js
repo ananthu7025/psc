@@ -44,10 +44,14 @@ const ViewTest = () => {
                 </p>
                 <div className="answer">
                 {quizDetails[currentQuestion].options.map((option, optionIndex) => (
-  <label
-    key={optionIndex}
-    className={`answer-item ${quizDetails[currentQuestion].correctOption === optionIndex ? 'correct-answer' : ''} ${quizDetails[currentQuestion].userSelectedOption === optionIndex.toString() ? 'user-selected' : ''}`}
-  >
+                  <label
+                      key={optionIndex}
+                      className={`answer-item 
+                        ${quizDetails[currentQuestion].correctOption === optionIndex ? 'correct-answer' : ''}
+                        ${quizDetails[currentQuestion].userSelectedOption === optionIndex.toString() ? 'user-selected' : ''}
+                        ${quizDetails[currentQuestion].correctOption === optionIndex && quizDetails[currentQuestion].userSelectedOption === optionIndex.toString() ? 'correct-and-user-selected' : ''}
+                      `}
+                    >
     <input
       type="radio"
       name={`option_${currentQuestion}`}

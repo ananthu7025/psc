@@ -171,7 +171,6 @@ const YourComponent = () => {
                               <a
                                 href={`${BASE_URL}/download/${selectedFolder}/${encodeURIComponent(file)}`}
                                 className="text-secondary font-weight-bold text-xs"
-                                // target="_blank"
                                 rel="noopener noreferrer"
                                 download={file}
                               >

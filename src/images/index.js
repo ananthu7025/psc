@@ -24,11 +24,15 @@ import main from './create kerala t 0.png';
 import logo from './logo.jpg';
 import qrTwofity from './two.jpg';
 import qrFour from './qr450.jpg';
+import one from './one.png';
+import two from './twoo.png';
+import theree from './three.png';
+
 
 
 // Export all the imported images
 const images = {
-    avatar,qrTwofity,qrFour,
+    avatar,qrTwofity,qrFour,one,two,theree,
     empty,down,banner1,banner2,svg1,svg2,category1,category2,category3,category4,about,about1,about2,about3,illust,illust2,illust3,main,logo
 
   // Add more images here as needed
