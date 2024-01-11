@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom';
 import images from '../images';
 import { useGetUserDetailsQuery } from '../api/modules/login';
@@ -8,28 +8,39 @@ const Navbar = ({ toggleSidebar }) => {
   const currentPath = location.pathname;
   const { data: user } = useGetUserDetailsQuery();
 
+  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
+
   useEffect(() => {
+    const handleToggleSidebar = () => {
+      if (isSmallScreen) {
+        toggleSidebar();
+      }
+    };
+
     const iconNavbarSidenav = document.getElementById('iconNavbarSidenav');
 
-    const handleToggleSidebar = () => {
-      toggleSidebar();
-    };
     if (iconNavbarSidenav) {
       iconNavbarSidenav.addEventListener('click', handleToggleSidebar);
     }
+
     return () => {
       if (iconNavbarSidenav) {
         iconNavbarSidenav.removeEventListener('click', handleToggleSidebar);
       }
     };
-  }, [toggleSidebar, location.pathname]);
+  }, [toggleSidebar, isSmallScreen]);
 
   useEffect(() => {
+    const handleResize = () => {
+      setIsSmallScreen(window.innerWidth < 768);
+    };
 
-    console.log(currentPath !== 'Profile')
-    if(currentPath !== '/Profile')
-    toggleSidebar();
-  }, [location.pathname]);
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
   
   return (
     <nav

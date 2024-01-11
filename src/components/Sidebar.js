@@ -21,6 +21,12 @@ const Sidebar = () => {
     localStorage.removeItem('gtoken');
     navigate("/login")
   };
+  const closeSidebar = () => {
+    const iconSidenav = document.getElementById('iconNavbarSidenav');
+    if (iconSidenav) {
+      iconSidenav.click();
+    }
+  };
   return (
     <aside
       className="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3 bg-gradient-dark"
@@ -37,7 +43,9 @@ const Sidebar = () => {
       <div className="collapse navbar-collapse w-auto max-height-vh-100" id="sidenav-collapse-main">
         <ul className="navbar-nav">
           <li className="nav-item">
-            <Link to="/home" className={`nav-link ${currentPath === '/home' ? 'active bg-gradient-success' : ''}`}>
+            <Link
+              onClick={closeSidebar}
+             to="/home" className={`nav-link ${currentPath === '/home' ? 'active bg-gradient-success' : ''}`}>
               <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                 <i className="material-icons opacity-10">dashboard</i>
               </div>
@@ -45,7 +53,10 @@ const Sidebar = () => {
             </Link>
           </li>
           <li className="nav-item">
-            <Link to="/quiz-cat" className={`nav-link ${currentPath === '/quiz-cat' ? 'active bg-gradient-success' : ''}`}>
+            <Link
+              onClick={closeSidebar}
+
+             to="/quiz-cat" className={`nav-link ${currentPath === '/quiz-cat' ? 'active bg-gradient-success' : ''}`}>
               <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                 <i className="material-icons opacity-10">assignment</i>
               </div>
@@ -54,7 +65,10 @@ const Sidebar = () => {
           </li>
           <li className="nav-item">
 
-            <Link to="/EXAMCALENDER&SYLLABUS" className={`nav-link ${currentPath === '/EXAMCALENDER&SYLLABUS' ? 'active bg-gradient-success' : ''}`}>
+            <Link
+              onClick={closeSidebar}
+
+             to="/EXAMCALENDER&SYLLABUS" className={`nav-link ${currentPath === '/EXAMCALENDER&SYLLABUS' ? 'active bg-gradient-success' : ''}`}>
               <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                 <i className="material-icons opacity-10">notifications</i>
               </div>
@@ -63,7 +77,10 @@ const Sidebar = () => {
           </li>
           <li className="nav-item">
 
-            <Link to="/PscBullettin" className={`nav-link ${currentPath === '/PscBullettin' ? 'active bg-gradient-success' : ''}`}>
+            <Link
+              onClick={closeSidebar}
+
+             to="/PscBullettin" className={`nav-link ${currentPath === '/PscBullettin' ? 'active bg-gradient-success' : ''}`}>
               <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                 <i className="material-icons opacity-10">library_books</i>
               </div>
@@ -72,7 +89,10 @@ const Sidebar = () => {
           </li>
           <li className="nav-item">
 
-            <Link to="/PreviousQuestionPaper" className={`nav-link ${currentPath === '/PreviousQuestionPaper' ? 'active bg-gradient-success' : ''}`}>
+            <Link
+              onClick={closeSidebar}
+
+             to="/PreviousQuestionPaper" className={`nav-link ${currentPath === '/PreviousQuestionPaper' ? 'active bg-gradient-success' : ''}`}>
               <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                 <i className="material-icons opacity-10">library_books</i>
               </div>
@@ -81,7 +101,10 @@ const Sidebar = () => {
           </li>
           <li className="nav-item">
 
-            <Link to="/StudyPlan" className={`nav-link ${currentPath === '/StudyPlan' ? 'active bg-gradient-success' : ''}`}>
+            <Link 
+              onClick={closeSidebar}
+
+            to="/StudyPlan" className={`nav-link ${currentPath === '/StudyPlan' ? 'active bg-gradient-success' : ''}`}>
               <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                 <i className="material-icons opacity-10">library_books</i>
               </div>
@@ -90,7 +113,9 @@ const Sidebar = () => {
           </li>
           <li className="nav-item">
 
-            <Link to="/SpecialTopic" className={`nav-link ${currentPath === '/SpecialTopic' ? 'active bg-gradient-success' : ''}`}>
+            <Link 
+              onClick={closeSidebar}
+            to="/SpecialTopic" className={`nav-link ${currentPath === '/SpecialTopic' ? 'active bg-gradient-success' : ''}`}>
               <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                 <i className="material-icons opacity-10">library_books</i>
               </div>
@@ -99,7 +124,9 @@ const Sidebar = () => {
           </li>
           <li className="nav-item">
 
-            <Link to="/CurrentAffairs" className={`nav-link ${currentPath === '/CurrentAffairs' ? 'active bg-gradient-success' : ''}`}>
+            <Link
+              onClick={closeSidebar}
+             to="/CurrentAffairs" className={`nav-link ${currentPath === '/CurrentAffairs' ? 'active bg-gradient-success' : ''}`}>
               <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                 <i className="material-icons opacity-10">library_books</i>
               </div>
@@ -109,7 +136,10 @@ const Sidebar = () => {
 
           <li className="nav-item">
 
-            <Link to="/Profile" className={`nav-link ${currentPath === '/Profile' ? 'active bg-gradient-success' : ''}`}>
+            <Link 
+              onClick={closeSidebar}
+
+            to="/Profile" className={`nav-link ${currentPath === '/Profile' ? 'active bg-gradient-success' : ''}`}>
               <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                 <i className="material-icons opacity-10">person</i>
               </div>
@@ -120,7 +150,10 @@ const Sidebar = () => {
             data?.isAdmin ?
               <li className="nav-item">
 
-                <Link to="/Referal" className={`nav-link ${currentPath === '/Referal' ? 'active bg-gradient-success' : ''}`}>
+                <Link
+              onClick={closeSidebar}
+
+                 to="/Referal" className={`nav-link ${currentPath === '/Referal' ? 'active bg-gradient-success' : ''}`}>
                   <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                     <i className="material-icons opacity-10">person</i>
                   </div>
@@ -133,7 +166,10 @@ const Sidebar = () => {
             data?.isAdmin ?
               <li className="nav-item">
 
-                <Link to="/User" className={`nav-link ${currentPath === '/User' ? 'active bg-gradient-success' : ''}`}>
+                <Link 
+              onClick={closeSidebar}
+                
+                to="/User" className={`nav-link ${currentPath === '/User' ? 'active bg-gradient-success' : ''}`}>
                   <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                     <i className="material-icons opacity-10">person</i>
                   </div>
@@ -146,7 +182,10 @@ const Sidebar = () => {
             data?.isAdmin ?
               <li className="nav-item">
 
-                <Link to="/questions" className={`nav-link ${currentPath === '/questions' ? 'active bg-gradient-success' : ''}`}>
+                <Link
+              onClick={closeSidebar}
+                
+                to="/questions" className={`nav-link ${currentPath === '/questions' ? 'active bg-gradient-success' : ''}`}>
                   <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                     <i className="material-icons opacity-10">assignment</i>
                   </div>

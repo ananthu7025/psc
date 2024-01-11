@@ -86,6 +86,7 @@ const YourComponent = () => {
       console.error('Error uploading file:', error);
     }
   };
+  console.log(selectedMonth)
   return (
     <div style={{ minHeight: "90vh" }} className="container-fluid py-4">
       <div className="row">
@@ -160,7 +161,7 @@ const YourComponent = () => {
                         currentItems && currentItems?.length > 0 ? (
                           currentItems?.map((item) => (
                             item?.secondSubfolders
-                              .filter(secondSubfolder => secondSubfolder.subfolder === selectedMonth)
+                              .filter((secondSubfolder) => secondSubfolder.subfolder === selectedMonth && item.mainSubfolder === selectedYear)
                               .map((filteredSubfolder, subfolderIndex) => (
                                 filteredSubfolder.pdfFiles.map((pdfFile, pdfIndex) => (
                                   <tr key={`${subfolderIndex}-${pdfIndex}`}>
